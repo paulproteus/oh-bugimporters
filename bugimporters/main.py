@@ -3,7 +3,7 @@ import argparse
 import sys
 import yaml
 import mock
-import bugimporters.trac
+import importlib
 
 def dict2obj(d):
     class Trivial(object):
@@ -46,7 +46,11 @@ def main(raw_arguments):
                     'update': bug_transit,
                     'delete_by_url': lambda *args: {}}
 
-        bug_importer = bugimporters.trac.SynchronousTracBugImporter(
+        module, class_name = obj.bugimporter.split('.', 1)
+        bug_import_module = importlib.import_module('bugimporters.%s' % (
+                module,))
+        bug_import_class = getattr(bug_import_module, class_name)
+        bug_importer = bug_import_class(
             obj, FakeReactorManager(),
             data_transits={'bug': generate_bug_transit(),
                            'trac': {
