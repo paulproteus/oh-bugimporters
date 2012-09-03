@@ -59,13 +59,13 @@ def main(raw_arguments):
                     'update_timeline': mock.Mock()
                     }})
         class StupidQuery(object):
-            @staticmethod
-            def get_query_url():
-                return 'http://twistedmatrix.com/trac/query?format=csv&col=id&col=summary&col=status&col=owner&col=type&col=priority&col=milestone&id=5228&order=priority' # FIXME: Hack
-            @staticmethod
+            def __init__(self, url):
+                self.url = url
+            def get_query_url(self):
+                return self.url
             def save(*args, **kwargs):
                 pass # FIXME: Hack
-        queries = [StupidQuery]
+        queries = [StupidQuery(q) for q in obj.queries]
         bug_importer.process_queries(queries)
         all_bug_data.extend(bug_data)
 
