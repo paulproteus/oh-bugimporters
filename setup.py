@@ -22,6 +22,7 @@ setup_params = dict(
         'argparse',
         'mock',
         'PyYAML',
+        'importlib',
     ],
 )
 
