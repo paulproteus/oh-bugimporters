@@ -55,7 +55,7 @@ class TracBugImporter(BugImporter):
             print query_url
             yield scrapy.http.Request(
                 url=query_url,
-                callback=self.handle_query_csv)
+                callback=self.handle_query_csv_response)
 
     def handle_timeline_rss(self, timeline_rss):
         # There are two steps to updating the timeline.
@@ -113,8 +113,11 @@ class TracBugImporter(BugImporter):
             tb_times.last_polled = max(comment_dates)
             tb_times.save()
 
-    def handle_query_csv(self, response):
-        in_stream = StringIO.StringIO(response.body)
+    def handle_query_csv_response(self, response):
+        return self.handle_query_csv(response.body)
+
+    def handle_query_csv(self, query_csv):
+        in_stream = StringIO.StringIO(query_csv)
         out_stream = wrap_file_object_in_utf8_check(in_stream)
         query_csv = out_stream.read()
 
@@ -156,21 +159,24 @@ class TracBugImporter(BugImporter):
 
             r = scrapy.http.Request(
                 url=tbp.bug_csv_url,
-                callback=self.handle_bug_csv,
+                callback=self.handle_bug_csv_response,
                 errback=self.errback_bug_data)
             r.meta['tbp'] = tbp
             yield r
 
-    def handle_bug_csv(self, response):
+    def handle_bug_csv_response(self, response):
         tbp = response.request.meta['tbp']
         bug_csv = response.body_as_unicode().encode('utf-8')
+        return self.handle_bug_csv(bug_csv, tbp)
+
+    def handle_bug_csv(self, bug_csv, tbp):
         # Pass the TracBugParser the CSV data
         tbp.set_bug_csv_data(bug_csv)
 
         # Now fetch the bug HTML
         r = scrapy.http.Request(
             url=tbp.bug_html_url,
-            callback=self.handle_bug_html,
+            callback=self.handle_bug_html_response,
             errback=self.errback_bug_data)
         r.meta['tbp'] = tbp
         return r
@@ -194,9 +200,12 @@ class TracBugImporter(BugImporter):
             # Pass the Failure on.
             return failure
 
-    def handle_bug_html(self, response):
+    def handle_bug_html_response(self, response):
         bug_html = response.body_as_unicode().encode('utf-8')
         tbp = response.request.meta['tbp']
+        return self.handle_bug_html(bug_html, tbp)
+
+    def handle_bug_html(self, bug_html, tbp):
         # Pass the TracBugParser the HTML data
         tbp.set_bug_html_data(bug_html)
 
