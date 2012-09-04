@@ -89,11 +89,53 @@ import scrapy.spider
 class TracSpider(scrapy.spider.BaseSpider):
     name = "All tracs"
 
+    def start_requests(self):
+        objs = []
+        for d in self.input_data:
+            objs.append(dict2obj(d))
+
+        for obj in objs:
+            bug_data = []
+
+            def generate_bug_transit(bug_data=bug_data):
+                def bug_transit(bug):
+                    import pdb; pdb.set_trace()
+
+                return {'get_fresh_urls': lambda *args: {},
+                        'update': bug_transit,
+                        'delete_by_url': lambda *args: {}}
+
+            module, class_name = obj.bugimporter.split('.', 1)
+            bug_import_module = importlib.import_module('bugimporters.%s' % (
+                    module,))
+            bug_import_class = getattr(bug_import_module, class_name)
+            bug_importer = bug_import_class(
+                obj, FakeReactorManager(),
+                data_transits={'bug': generate_bug_transit(),
+                               'trac': {
+                        'get_bug_times': lambda url: (None, None),
+                        'get_timeline_url': mock.Mock(),
+                        'update_timeline': mock.Mock()
+                        }})
+            class StupidQuery(object):
+                def __init__(self, url):
+                    self.url = url
+                def get_query_url(self):
+                    return self.url
+                def save(*args, **kwargs):
+                    pass # FIXME: Hack
+            queries = [StupidQuery(q) for q in obj.queries]
+            l = list(bug_importer.process_queries(queries))
+            print l
+            return l
+
     def parse(self, request):
+        print 'rofl, we should never be here'
         print request
 
-    def __init__(self, input_filename):
-        self.start_urls  =['http://ldpreload.com/']
+    def __init__(self, input_filename=None):
+        with open(input_filename) as f:
+            self.input_data = yaml.load(f)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
