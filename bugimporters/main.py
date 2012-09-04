@@ -79,5 +79,17 @@ def main(raw_arguments):
     yaml.safe_dump([dict(x) for x in all_bug_data], out_fd)
     out_fd.close()
 
+
+import scrapy.spider
+
+class TracSpider(scrapy.spider.BaseSpider):
+    name = "All tracs"
+
+    def parse(self, request):
+        print request
+
+    def __init__(self, input_filename):
+        self.start_urls  =['http://ldpreload.com/']
+
 if __name__ == '__main__':
     main(sys.argv[1:])
