@@ -30,7 +30,7 @@ import urllib2
 import StringIO
 import scrapy.http
 
-from bugimporters.base import BugImporter
+from bugimporters.base import BugImporter, printable_datetime
 from bugimporters.helpers import (string2naive_datetime, cached_property,
         unicodify_strings_when_inputted, wrap_file_object_in_utf8_check)
 import bugimporters.items
@@ -67,7 +67,8 @@ class TracBugImporter(BugImporter):
             # Format the data.
             base_url = self.tm.base_url
             entry_url = entry.link.rsplit("#", 1)[0]
-            entry_date = datetime.datetime(*entry.date_parsed[0:6])
+            entry_date = printable_datetime(
+                datetime.datetime(*entry.date_parsed[0:6]))
             entry_status = entry.title.split("): ", 1)[0].rsplit(" ", 1)[1]
 
             timeline_url = self.data_transits['trac']['get_timeline_url']({
@@ -113,7 +114,9 @@ class TracBugImporter(BugImporter):
             tb_times.save()
 
     def handle_query_csv(self, response):
-        query_csv = response.body_as_unicode().encode('utf-8')
+        in_stream = StringIO.StringIO(response.body)
+        out_stream = wrap_file_object_in_utf8_check(in_stream)
+        query_csv = out_stream.read()
 
         # If the "csv" starts with an HTML stanza, log that and die.
         if query_csv.lower().strip().startswith('<!doctype'):
@@ -128,6 +131,7 @@ class TracBugImporter(BugImporter):
             if 'id' in line:
                 bug_ids.append(int(line['id']))
             else:
+                import pdb; pdb.set_trace()
                 logging.warning("Curious: We ran into a really odd line in Roundup.")
                 logging.warning("%s", line)
 
@@ -284,7 +288,7 @@ class TracBugParser(object):
         date_string = span.attrib['title']
         date_string = date_string.replace('in Timeline', '')
         date_string = date_string.replace('See timeline at ', '')
-        return string2naive_datetime(date_string)
+        return printable_datetime(string2naive_datetime(date_string))
 
     @staticmethod
     def all_people_in_changes(doc):
@@ -348,7 +352,7 @@ class TracBugParser(object):
                'submitter_username': self.bug_csv['reporter'],
                'submitter_realname': '',  # can't find this in Trac
                'canonical_bug_link': self.bug_url,
-               'last_polled': datetime.datetime.utcnow(),
+               'last_polled': printable_datetime(),
                '_project_name': tm.tracker_name,
                })
         ret['importance'] = self.bug_csv.get('priority', '')

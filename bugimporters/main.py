@@ -125,9 +125,8 @@ class TracSpider(scrapy.spider.BaseSpider):
                 def save(*args, **kwargs):
                     pass # FIXME: Hack
             queries = [StupidQuery(q) for q in obj.queries]
-            l = list(bug_importer.process_queries(queries))
-            print l
-            return l
+            for request in bug_importer.process_queries(queries):
+                yield request
 
     def parse(self, request):
         print 'rofl, we should never be here'
