@@ -1,0 +1,3 @@
+To run this with scrapy, do:
+
+env/bin/scrapy runspider bugimporters/main.py  -a input_filename=/tmp/all-bug-trackers.yaml  -s FEED_FORMAT=json -s FEED_URI=/tmp/results.json  -s LOG_FILE=/tmp/scrapy-log -s CONCURRENT_REQUESTS_PER_DOMAIN=1 -s CONCURRENT_REQUESTS=200
