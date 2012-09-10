@@ -23,7 +23,7 @@ class TestLaunchpadBugImporter(object):
             bugimporter='launchpad.LaunchpadBugImporter',
             )
 
-    def test_top_to_bottom(self):
+    def test_top_to_bottom(self, extra_url2filename=None):
         spider = bugimporters.main.BugImportSpider()
         spider.input_data = [self.tm]
         url2filename = {
@@ -40,6 +40,9 @@ class TestLaunchpadBugImporter(object):
                 os.path.join(HERE, 'sample-data', 'launchpad',
                              '~vila'),
             }
+        if extra_url2filename:
+            url2filename.update(extra_url2filename)
+
         ar = autoresponse.Autoresponder(url2filename=url2filename,
                                         url2errors={})
         items = ar.respond_recursively(spider.start_requests())
@@ -63,3 +66,13 @@ class TestLaunchpadBugImporter(object):
 
         self.assertEqual('vila', item['submitter_username'])
         self.assertEqual('Vincent Ladeuil', item['submitter_realname'])
+        return item
+
+    def test_looks_closed_detection(self):
+        extra_url2filename={
+            'https://api.launchpad.net/1.0/bzr/?ws.op=searchTasks':
+                os.path.join(HERE, 'sample-data', 'launchpad',
+                             'bzr?ws.op=searchTasks.closed'),
+            }
+        item = self.test_top_to_bottom(extra_url2filename=extra_url2filename)
+        assert item['looks_closed']
