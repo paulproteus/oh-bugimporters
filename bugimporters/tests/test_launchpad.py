@@ -85,3 +85,12 @@ class TestLaunchpadBugImporter(object):
             }
         item = self.test_top_to_bottom(extra_url2filename=extra_url2filename)
         assert item['concerns_just_documentation']
+
+    def test_bitesize_detection(self):
+        extra_url2filename={
+            'https://api.launchpad.net/1.0/bugs/839461':
+                os.path.join(HERE, 'sample-data', 'launchpad',
+                             'bugs_839461bite'),
+            }
+        item = self.test_top_to_bottom(extra_url2filename=extra_url2filename)
+        assert item['good_for_newcomers']
