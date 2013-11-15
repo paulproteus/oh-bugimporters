@@ -36,6 +36,8 @@ need to run "apt-get install python-virtualenv" before this will work.)
 
 3. ``virtualenv env``
 
+*Note*: If your on **OSX** (tested on 10.8.5) using ``virtualenv -p python2.7 env`` has shown to be successful.
+
 Tell the virtualenv we want to "develop" this app, which also has the
 side-effect of downloading and installing any dependencies.
 
