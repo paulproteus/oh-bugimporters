@@ -57,62 +57,6 @@ class TracBugImporter(BugImporter):
                 url=query,
                 callback=self.handle_query_csv_response)
 
-    def handle_timeline_rss(self, timeline_rss):
-        # There are two steps to updating the timeline.
-        # First step is to use the actual timeline to update the date_reported and
-        # last_touched fields for each bug.
-
-        # Parse the returned timeline RSS feed.
-        for entry in feedparser.parse(timeline_rss).entries:
-            # Format the data.
-            base_url = self.tm.get_base_url()
-            entry_url = entry.link.rsplit("#", 1)[0]
-            entry_date = printable_datetime(
-                datetime.datetime(*entry.date_parsed[0:6]))
-            entry_status = entry.title.split("): ", 1)[0].rsplit(" ", 1)[1]
-
-            timeline_url = self.data_transits['trac']['get_timeline_url']({
-                    'base_url': base_url,
-                    'entry_url': entry_url,
-                    'entry_date': entry_date,
-                    'entry_status': entry_status})
-
-            # Add the URL to the waiting list
-            yield scrapy.http.Request(
-                url=timeline_url,
-                callback=self.handle_timeline_rss)
-
-        # Second step is to use the RSS feed for each individual bug to update the
-        # last_touched field. This would be unneccessary if the timeline showed
-        # update events as well as creation and closing ones, and in fact later
-        # versions of Trac have this option - but then the later versions of Trac
-        # also hyperlink to the timeline from the bug, making this all moot.
-        # Also, we cannot just use the RSS feed for everything, as it is missing
-        # the date_reported time, as well as a lot of information about the bug
-        # itself (e.g. Priority).
-        for tb_times in self.timeline.tracbugtimes_set.all():
-            # Check that the bug has not beeen seen as 'closed' in the timeline.
-            # This will reduce network load by not grabbing the RSS feed of bugs
-            # whose last_touched info is definitely correct.
-            if 'closed' not in tb_times.latest_timeline_status:
-                r = scrapy.http.Request(
-                        url=tb_times.canonical_bug_link + '?format=rss',
-                        callback=self.handle_bug_rss)
-                r.meta['cb_args'] = tb_times
-                yield r
-
-        # URLs are now all prepped, so start pushing them onto the reactor.
-        self.push_urls_onto_reactor()
-
-    def handle_bug_rss(self, bug_rss, tb_times):
-        feed = feedparser.parse(bug_rss)
-        comment_dates = [datetime.datetime(
-                *e.date_parsed[0:6]) for e in feed.entries]
-        # Check if there are comments to grab from.
-        if comment_dates:
-            tb_times.last_polled = max(comment_dates)
-            tb_times.save()
-
     def handle_query_csv_response(self, response):
         return self.handle_query_csv(response.body)
 
