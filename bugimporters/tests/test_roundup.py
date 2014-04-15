@@ -125,6 +125,7 @@ the module to the output. (Long live lambda.)""")
         self.assertEqual(bug['submitter_username'], 'benjhayden')
         self.assertEqual(bug['submitter_realname'], 'Ben Hayden')
         self.assertEqual(bug['canonical_bug_link'], 'http://mercurial.selenic.com/bts/issue1550')
+        self.assertEqual(bug['files'], [{'author': 'benjhayden', 'url': 'file8863/pydocbug.patch'}])
         assert bug['good_for_newcomers']
         assert bug['looks_closed']
         return bug
