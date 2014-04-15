@@ -25,3 +25,4 @@ class ParsedBug(scrapy.item.Item):
     good_for_newcomers = scrapy.item.Field()
     concerns_just_documentation = scrapy.item.Field()
     files = scrapy.item.Field()
+    messages = scrapy.item.Field()

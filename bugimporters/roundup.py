@@ -19,6 +19,7 @@
 import datetime
 import logging
 import lxml.html
+import lxml.etree
 import re
 import urlparse
 import scrapy.http
@@ -132,7 +133,6 @@ class RoundupBugParser(object):
 
         ret["files"] = []
         files=tree.find_class("files") #Grab files table by classname
-        print files
         if files!=[]: #if I find an actual table (dosen't exist if no files)
             files=files[0] #grab table, then tbody
             files = files[2:] #Strip off the two header TRs
@@ -141,6 +141,27 @@ class RoundupBugParser(object):
                         "url":file_entry[0][0].attrib['href'],
                         "author":file_entry[1][0].text
                     })
+
+        ret["messages"] = []
+        messages=tree.find_class("messages")[0]
+        if messages!=[]:
+            if "tbody" in lxml.html.tostring(messages):
+                messages=messages[0]
+            messages=messages[1:]
+            count=0
+            author=""
+            while count!=len(messages):
+                if count%2==0:
+                    author=messages[count][1].text.replace("Author: ",'')
+                else:
+                    content=lxml.etree.tostring(messages[count][0][0],
+                        pretty_print=True)
+                    ret["messages"].append({
+                            "author":author,
+                            "message":content
+                        })
+                    print "APPENDED"
+                count+=1
 
         return ret
 
@@ -224,7 +245,8 @@ class RoundupBugParser(object):
                'canonical_bug_link': self.bug_url,
                'last_polled': datetime.datetime.utcnow().isoformat(),
                '_project_name': tm.tracker_name,
-               'files': metadata_dict['files']
+               'files': metadata_dict['files'],
+               'messages': metadata_dict['messages']
                })
 
         # Check for the bitesized keyword
