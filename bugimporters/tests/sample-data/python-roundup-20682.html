@@ -1,0 +1,595 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>
+Issue 20682: test_create_ssl_unix_connection() of test_asyncio failed on "x86 Tiger 3.x" - Python tracker
+
+</title>
+<link rel="shortcut icon" href="@@file/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="@@file/main.css" />
+<link rel="stylesheet" type="text/css" href="@@file/style.css" />
+<link rel="search" type="application/opensearchdescription+xml" href="@@file/osd.xml" title="Python bug tracker search" />
+<meta http-equiv="Content-Type"
+      content="text/html; charset=utf-8" />
+
+<script type="text/javascript">
+submitted = false;
+function submit_once() {
+    if (submitted) {
+        alert("Your request is being processed.\nPlease be patient.");
+        event.returnValue = 0;    // work-around for IE
+        return 0;
+    }
+    submitted = true;
+    return 1;
+}
+
+function help_window(helpurl, width, height) {
+    HelpWin = window.open('http://bugs.python.org/' + helpurl, 'RoundupHelpWindow', 'scrollbars=yes,resizable=yes,toolbar=no,height='+height+',width='+width);
+}
+</script>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.js"></script>
+<script type="text/javascript" src="@@file/issue.item.js"></script>
+<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css" />
+
+
+</head>
+<body>
+  <!--  Logo  -->
+  <h1 id="logoheader">
+    <a accesskey="1" href="." id="logolink">
+       <img src="@@file/python-logo.gif" alt="homepage" border="0" id="logo" /></a>
+  </h1>
+
+<div id="utility-menu">
+<!-- Search Box -->
+<div id="searchbox">
+    <form name="searchform" method="get" action="issue" id="searchform">
+      <div id="search">
+       <input type="hidden" name="@columns"
+              value="id,activity,title,creator,assignee,status,type" />
+       <input type="hidden" name="@sort" value="-activity" />
+       <input type="hidden" name="@filter" value="status" />
+       <input type="hidden" name="@action" value="searchid" />
+       <input type="hidden" name="ignore" value="file:content" />
+       <input class="input-text" id="search-text"
+              name="@search_text" size="10" />
+       <input type="submit" id="submit" value="search" name="submit" class="input-button" />
+       <input type="radio" name="status"
+              id="status_notresolved" value="-1,1,3" />
+       <label for="status_notresolved">open</label>
+       <input type="radio" name="status" checked="checked"
+              id="status_all" value="-1,1,2,3" />
+       <label for="status_all">all</label>
+      </div>
+     </form>
+</div>
+</div>
+
+
+<div id="left-hand-navigation">
+<!--  Main Menu NEED LEVEL TWO HEADER AND FOOTER -->
+<div id="menu">
+  <ul class="level-one">
+    <li><a href="http://python.org/" title="Go to the Python homepage">Python Home</a></li>
+    <li><a href="http://python.org/about" title="About The Python Language">About</a></li>
+    <li><a href="http://python.org/news" title="">News</a></li>
+    <li><a href="http://python.org/doc" title="">Documentation</a></li>
+    <li><a href="http://python.org/download" title="">Download</a></li>
+    <li><a href="http://python.org/community" title="">Community</a></li>
+    <li><a href="http://python.org/psf" title="Python Software Foundation">Foundation</a></li>
+    <li><a href="http://docs.python.org/devguide/" title="Python Core Language Development">Core Development</a></li>
+    <li class="selected"><a href="." class="selected" title="Python Issue Tracker">Issue Tracker</a>
+      <ul class="level-two">
+        <li>
+          <strong>Issues</strong>
+          <ul class="level-three">
+            
+            <li><a href="issue?@template=search&amp;status=1">Search</a></li>
+            <li><a href="issue?@action=random">Random Issue</a></li>
+            <li>
+              <form method="post" action="#">
+                <input type="submit" class="form-small"
+                       value="Show issue:" />
+                <input class="form-small" size="4" type="text" name="@number" />
+                <input type="hidden" name="@type" value="issue" />
+                <input type="hidden" name="@action" value="show" />
+              </form>
+            </li>
+          </ul>
+        </li>
+
+
+        <li>
+          <strong>Summaries</strong>
+          <ul class="level-three">
+            
+
+            
+
+            
+
+            <li>
+              <a href="issue?status=1&amp;@sort=-activity&amp;@columns=id,activity,title,creator,status&amp;@dispname=Issues with patch&amp;@startwith=0&amp;@group=priority&amp;keywords=2&amp;@action=search&amp;@filter=&amp;@pagesize=50">Issues with patch</a>
+            </li>
+
+            <li>
+              <a href="issue?status=1&amp;@sort=-activity&amp;@columns=id,activity,title,creator,status&amp;@dispname=Easy issues&amp;@startwith=0&amp;@group=priority&amp;keywords=6&amp;@action=search&amp;@filter=&amp;@pagesize=50">Easy issues</a>
+            </li>
+
+          </ul>
+        </li>
+
+
+        <li>
+          <strong>User</strong>
+          <form method="post" action="#">
+          <ul class="level-three">
+            <li>
+                Login&nbsp;(OpenID&nbsp;possible)<br />
+                <a style="display:inline;width:0;margin:0"
+                   href="issue20682?@action=openid_login&amp;provider=Google">
+                  <img hspace="0" vspace="0" width="16"
+                       height="16"
+                       src="https://www.google.com/favicon.ico"
+                       alt="Google" title="Google" /></a>
+                <a style="display:inline;width:0;margin:0"
+                   href="issue20682?@action=openid_login&amp;provider=myOpenID">
+                  <img hspace="0" vspace="0" width="16"
+                       height="16"
+                       src="https://www.myopenid.com/favicon.ico"
+                       alt="myOpenID" title="myOpenID" /></a>
+                <a style="display:inline;width:0;margin:0"
+                   href="issue20682?@action=openid_login&amp;provider=Launchpad">
+                  <img hspace="0" vspace="0" width="16"
+                       height="16"
+                       src="https://login.launchpad.net/favicon.ico"
+                       alt="Launchpad" title="Launchpad" /></a>
+                <input size="10" name="openid_identifier" style="background:url(@@file/openid-16x16.gif)
+                  center left no-repeat;padding-left:16px" /><br />
+                <input size="10" type="password" name="__login_password" /><br />
+                <input type="hidden" name="@action" value="Login" />
+                <input type="checkbox" name="remember" id="remember" />
+                <label for="remember">Remember me?</label><br />
+                <input class="form-small" type="submit"
+                       value="Login" /><br />
+                <input type="hidden" name="__came_from"
+                       value="issue20682" />
+                <input type="hidden" name="@sort" value=""/>
+<input type="hidden" name="@group" value=""/>
+<input type="hidden" name="@pagesize" value="50"/>
+<input type="hidden" name="@startwith" value="0"/>
+            </li>
+            <li>
+                <a href="user?@template=register">Register</a>
+            </li>
+            <li><a href="user?@template=forgotten">Lost&nbsp;your&nbsp;login?</a></li>
+          </ul>
+          </form>
+        </li>
+
+        
+
+        
+
+        
+
+        <li>
+          <strong>Help</strong>
+          <ul class="level-three">
+            <li><a href="http://docs.python.org/devguide/triaging.html">
+                Tracker Documentation</a></li>
+            <li><a href="http://wiki.python.org/moin/TrackerDevelopment">
+                Tracker Development</a></li>
+            <li><a href="http://psf.upfronthosting.co.za/roundup/meta">
+                Report Tracker Problem</a></li>
+          </ul>
+        </li>
+
+      </ul>
+    </li>
+  </ul>
+</div> <!-- menu -->
+</div> <!-- left-hand-navigation -->
+
+<div id="content-body">
+<div id="body-main">
+<div id="content">
+<div id="breadcrumb">
+ 
+ 
+ Issue20682
+ 
+</div>
+ 
+ 
+
+
+
+
+
+<div>
+
+<form method="post" name="itemSynopsis"
+      onsubmit="return submit_once()"
+      enctype="multipart/form-data" action="issue20682">
+
+<fieldset><legend>classification</legend>
+<table class="form">
+<tr>
+ <th class="required"><a href="http://docs.python.org/devguide/triaging.html#title" target="_blank">Title</a>:</th>
+ 
+ <td colspan="3">
+  <span>test_create_ssl_unix_connection() of test_asyncio failed on "x86 Tiger 3.x"</span>
+  <input type="hidden" name="title"
+         value="test_create_ssl_unix_connection() of test_asyncio failed on &quot;x86 Tiger 3.x&quot;">
+ </td>
+</tr>
+
+<tr>
+ <th class="required"><a href="http://docs.python.org/devguide/triaging.html#type" target="_blank">Type</a>:</th>
+ <td></td>
+ <th><a href="http://docs.python.org/devguide/triaging.html#stage" target="_blank">Stage</a>:</th>
+ <td>committed/rejected</td>
+</tr>
+
+<tr>
+ <th><a href="http://docs.python.org/devguide/triaging.html#components" target="_blank">Components</a>:</th>
+ <td></td>
+ <th><a href="http://docs.python.org/devguide/triaging.html#versions" target="_blank">Versions</a>:</th>
+ <td></td>
+</tr>
+</table>
+</fieldset>
+
+<fieldset><legend>process</legend>
+<table class="form">
+<tr>
+  <th><a href="http://docs.python.org/devguide/triaging.html#status" target="_blank">Status</a>:</th>
+  <td>closed</td>
+  <th><a href="http://docs.python.org/devguide/triaging.html#resolution" target="_blank">Resolution</a>:</th>
+  <td>fixed</td>
+</tr>
+
+<tr>
+ <th>
+    <a href="http://docs.python.org/devguide/triaging.html#dependencies"
+       target="_blank">Dependencies</a>:
+ </th>
+ <td>
+  
+  
+ </td>
+ <th><a href="http://docs.python.org/devguide/triaging.html#superseder" target="_blank">Superseder</a>:</th>
+ <td>
+  
+ 
+ </td>
+ </tr>
+ <tr>
+ <th>
+   <a href="http://docs.python.org/devguide/triaging.html#assigned-to"
+      target="_blank">Assigned To</a>:
+ </th>
+ 
+ <td>
+  
+ </td>
+ <th>
+   <a href="http://docs.python.org/devguide/triaging.html#nosy-list"
+      target="_blank">Nosy List</a><!--
+        <span tal:condition="context/nosy_count" tal:replace="python: ' (%d)' % context.nosy_count" /> -->:
+  
+ </th>
+ <td>
+     haypo, hynek, ned.deily, python-dev, ronaldoussoren, yselivanov
+     
+ </td>
+</tr>
+<tr>
+ <th>
+   <a href="http://docs.python.org/devguide/triaging.html#priority"
+      target="_blank">Priority</a>:
+ </th>
+ <td></td>
+ <th>
+    <a href="http://docs.python.org/devguide/triaging.html#keywords"
+       target="_blank">Keywords</a>:
+ </th>
+ <td>patch</td>
+
+
+</tr>
+
+
+
+
+
+
+
+</table>
+</fieldset>
+<table class="form">
+
+</table>
+</form>
+
+<p>Created on <strong>2014-02-19 01:01</strong> by <strong>haypo</strong>, last changed <strong>2014-03-17 06:31</strong> by <strong>python-dev</strong>. This issue is now <strong style="color:#00F; background-color:inherit;">closed</strong>.</p>
+
+<table class="files">
+ <tr><th colspan="5" class="header">Files</th></tr>
+ <tr>
+  <th>File name</th>
+  <th>Uploaded</th>
+  <th>Description</th>
+  <th>Edit</th>
+ </tr>
+ <tr>
+  <td>
+   <a href="file34159/broken_unix_getsockname.patch">broken_unix_getsockname.patch</a>
+  </td>
+  <td>
+   <span>haypo</span>,
+   <span>2014-02-20 23:34</span>
+  </td>
+  <td></td>
+  <td>
+      
+      <a href="/review/20682/#ps11111">review</a>
+      
+  </td>
+ </tr>
+</table>
+
+
+
+
+
+<table class="messages">
+ <tr><th colspan="4" class="header">Messages (8)</th></tr>
+ 
+  <tr>
+    <th>
+     <a href="#msg211579" id="msg211579">msg211579</a> - <a
+    href="msg211579">(view)</a></th>
+   <th>Author: STINNER Victor (haypo) <span title="Contributor form received">*</span> <img src="@@file/committer.png" title="Python committer" alt="(Python committer)" /></th>
+   <th>Date: 2014-02-19 01:01</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre><a href="http://buildbot.python.org/all/builders/x86%20Tiger%203.x/builds/7907/steps/test/logs/stdio">http://buildbot.python.org/all/builders/x86%20Tiger%203.x/builds/7907/steps/test/logs/stdio</a>
+
+======================================================================
+FAIL: test_create_ssl_unix_connection (test.test_asyncio.test_events.KqueueEventLoopTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/db3l/buildarea/3.x.bolen-tiger/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l581">test/test_asyncio/test_events.py</a>", line 581, in test_create_ssl_unix_connection
+    self._basetest_create_ssl_connection(conn_fut)
+  File "/Users/db3l/buildarea/3.x.bolen-tiger/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l556">test/test_asyncio/test_events.py</a>", line 556, in _basetest_create_ssl_connection
+    self.assertIsNotNone(tr.get_extra_info('sockname'))
+AssertionError: unexpectedly None
+
+======================================================================
+FAIL: test_create_ssl_unix_connection (test.test_asyncio.test_events.PollEventLoopTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/db3l/buildarea/3.x.bolen-tiger/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l581">test/test_asyncio/test_events.py</a>", line 581, in test_create_ssl_unix_connection
+    self._basetest_create_ssl_connection(conn_fut)
+  File "/Users/db3l/buildarea/3.x.bolen-tiger/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l556">test/test_asyncio/test_events.py</a>", line 556, in _basetest_create_ssl_connection
+    self.assertIsNotNone(tr.get_extra_info('sockname'))
+AssertionError: unexpectedly None
+
+======================================================================
+FAIL: test_create_ssl_unix_connection (test.test_asyncio.test_events.SelectEventLoopTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/db3l/buildarea/3.x.bolen-tiger/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l581">test/test_asyncio/test_events.py</a>", line 581, in test_create_ssl_unix_connection
+    self._basetest_create_ssl_connection(conn_fut)
+  File "/Users/db3l/buildarea/3.x.bolen-tiger/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l556">test/test_asyncio/test_events.py</a>", line 556, in _basetest_create_ssl_connection
+    self.assertIsNotNone(tr.get_extra_info('sockname'))
+AssertionError: unexpectedly None</pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg211584" id="msg211584">msg211584</a> - <a
+    href="msg211584">(view)</a></th>
+   <th>Author: Roundup Robot (python-dev)</th>
+   <th>Date: 2014-02-19 01:21</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>New changeset <a href="http://hg.python.org/lookup/64ad965a2fd4">64ad965a2fd4</a> by Victor Stinner in branch 'default':
+Issue <a class="closed" title="[closed] test_create_ssl_unix_connection() of test_asyncio failed on 'x86 Tiger 3.x'" href="issue20682">#20682</a>: test_asyncio, _basetest_create_connection() checks also the
+<a href="http://hg.python.org/cpython/rev/64ad965a2fd4">http://hg.python.org/cpython/rev/64ad965a2fd4</a></pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg211586" id="msg211586">msg211586</a> - <a
+    href="msg211586">(view)</a></th>
+   <th>Author: Yury Selivanov (yselivanov) <span title="Contributor form received">*</span> <img src="@@file/committer.png" title="Python committer" alt="(Python committer)" /></th>
+   <th>Date: 2014-02-19 01:43</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>Looking at a man page for getsockname on Mac OS X (10.9):
+
+BUGS: Names bound to sockets in the UNIX domain are inaccessible; getsockname() returns a zero-length address.
+
+If you are not on macos: <a href="http://www.manpages.info/macosx/getsockname.2.html">http://www.manpages.info/macosx/getsockname.2.html</a></pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg211611" id="msg211611">msg211611</a> - <a
+    href="msg211611">(view)</a></th>
+   <th>Author: STINNER Victor (haypo) <span title="Contributor form received">*</span> <img src="@@file/committer.png" title="Python committer" alt="(Python committer)" /></th>
+   <th>Date: 2014-02-19 12:59</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>&gt; Looking at a man page for getsockname on Mac OS X (10.9):
+&gt; BUGS: Names bound to sockets in the UNIX domain are inaccessible; getsockname() returns a zero-length address.
+
+test_asyncio pass on Mac OS 10.6 (Snow Leopard) and 10.9 (Maverick). The issue looks to be specific to Mac OS 10.4.</pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg211632" id="msg211632">msg211632</a> - <a
+    href="msg211632">(view)</a></th>
+   <th>Author: Roundup Robot (python-dev)</th>
+   <th>Date: 2014-02-19 17:10</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>New changeset <a href="http://hg.python.org/lookup/e6016fffc894">e6016fffc894</a> by Victor Stinner in branch 'default':
+Close <a class="closed" title="[closed] test_create_ssl_unix_connection() of test_asyncio failed on 'x86 Tiger 3.x'" href="issue20682">#20682</a>: Fix UNIX sockets tests of test_asyncio on Mac OS X Tiger
+<a href="http://hg.python.org/cpython/rev/e6016fffc894">http://hg.python.org/cpython/rev/e6016fffc894</a></pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg211633" id="msg211633">msg211633</a> - <a
+    href="msg211633">(view)</a></th>
+   <th>Author: Roundup Robot (python-dev)</th>
+   <th>Date: 2014-02-19 17:32</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>New changeset <a href="http://hg.python.org/lookup/07cdce316b1d">07cdce316b1d</a> by Victor Stinner in branch 'default':
+Issue <a class="closed" title="[closed] test_create_ssl_unix_connection() of test_asyncio failed on 'x86 Tiger 3.x'" href="issue20682">#20682</a>: Oops, fix test_create_connection() of test_asyncio (fix my previous commit)
+<a href="http://hg.python.org/cpython/rev/07cdce316b1d">http://hg.python.org/cpython/rev/07cdce316b1d</a></pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg211764" id="msg211764">msg211764</a> - <a
+    href="msg211764">(view)</a></th>
+   <th>Author: STINNER Victor (haypo) <span title="Contributor form received">*</span> <img src="@@file/committer.png" title="Python committer" alt="(Python committer)" /></th>
+   <th>Date: 2014-02-20 23:34</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>Oh, AIX has the same issue. I propose broken_unix_getsockname.patch to skip also the check on 'sockname' extra info on AIX.
+
+The fix can wait Python 3.4.1.
+
+<a href="http://buildbot.python.org/all/builders/PPC64%20AIX%203.x/builds/1757/steps/test/logs/stdio">http://buildbot.python.org/all/builders/PPC64%20AIX%203.x/builds/1757/steps/test/logs/stdio</a>
+
+======================================================================
+FAIL: test_create_ssl_unix_connection (test.test_asyncio.test_events.PollEventLoopTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/shager/cpython-buildarea/3.x.edelsohn-aix-ppc64/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l603">test/test_asyncio/test_events.py</a>", line 603, in test_create_ssl_unix_connection
+    self._basetest_create_ssl_connection(conn_fut, check_sockname)
+  File "/home/shager/cpython-buildarea/3.x.edelsohn-aix-ppc64/build/Lib/<a href="http://hg.python.org/cpython/file/default/Lib/test/test_asyncio/test_events.py#l574">test/test_asyncio/test_events.py</a>", line 574, in _basetest_create_ssl_connection
+    self.assertIsNotNone(tr.get_extra_info('sockname'))
+AssertionError: unexpectedly None</pre>
+   </td>
+  </tr>
+ 
+ 
+  <tr>
+    <th>
+     <a href="#msg213838" id="msg213838">msg213838</a> - <a
+    href="msg213838">(view)</a></th>
+   <th>Author: Roundup Robot (python-dev)</th>
+   <th>Date: 2014-03-17 06:31</th>
+  </tr>
+  <tr>
+   <td colspan="4" class="content">
+    
+    <pre>New changeset <a href="http://hg.python.org/lookup/9aac931d7bf5">9aac931d7bf5</a> by Victor Stinner in branch '3.4':
+Issue <a class="closed" title="[closed] test_create_ssl_unix_connection() of test_asyncio failed on 'x86 Tiger 3.x'" href="issue20682">#20682</a>: test_asyncio, _basetest_create_connection() checks also the
+<a href="http://hg.python.org/cpython/rev/9aac931d7bf5">http://hg.python.org/cpython/rev/9aac931d7bf5</a>
+
+New changeset <a href="http://hg.python.org/lookup/472a4988489e">472a4988489e</a> by Victor Stinner in branch '3.4':
+Close <a class="closed" title="[closed] test_create_ssl_unix_connection() of test_asyncio failed on 'x86 Tiger 3.x'" href="issue20682">#20682</a>: Fix UNIX sockets tests of test_asyncio on Mac OS X Tiger
+<a href="http://hg.python.org/cpython/rev/472a4988489e">http://hg.python.org/cpython/rev/472a4988489e</a>
+
+New changeset <a href="http://hg.python.org/lookup/f38a7d61c4c2">f38a7d61c4c2</a> by Victor Stinner in branch '3.4':
+Issue <a class="closed" title="[closed] test_create_ssl_unix_connection() of test_asyncio failed on 'x86 Tiger 3.x'" href="issue20682">#20682</a>: Oops, fix test_create_connection() of test_asyncio (fix my previous commit)
+<a href="http://hg.python.org/cpython/rev/f38a7d61c4c2">http://hg.python.org/cpython/rev/f38a7d61c4c2</a></pre>
+   </td>
+  </tr>
+ 
+</table>
+
+<table class="history table table-condensed table-striped"><tr><th colspan="4" class="header">
+History
+</th></tr><tr>
+<th>Date</th>
+<th>User</th>
+<th>Action</th>
+<th>Args</th>
+</tr>
+<tr><td>2014-03-17&nbsp;06:31:15</td><td>python-dev</td><td>set</td><td>messages:
+  + <a rel="nofollow" href="msg213838">msg213838</a></td></tr>
+<tr><td>2014-02-20&nbsp;23:34:15</td><td>haypo</td><td>set</td><td>priority: release blocker -> <br />files:
+  + <a rel="nofollow" href="file34159">broken_unix_getsockname.patch</a><br />messages:
+  + <a rel="nofollow" href="msg211764">msg211764</a><br /><br />keywords:
+  + <a rel="nofollow" href="keyword2">patch</a></td></tr>
+<tr><td>2014-02-19&nbsp;17:32:13</td><td>python-dev</td><td>set</td><td>messages:
+  + <a rel="nofollow" href="msg211633">msg211633</a></td></tr>
+<tr><td>2014-02-19&nbsp;17:10:48</td><td>python-dev</td><td>set</td><td>status: open -> closed<br />resolution: fixed<br />messages:
+  + <a rel="nofollow" href="msg211632">msg211632</a><br /><br />stage: committed/rejected</td></tr>
+<tr><td>2014-02-19&nbsp;12:59:53</td><td>haypo</td><td>set</td><td>messages:
+  + <a rel="nofollow" href="msg211611">msg211611</a></td></tr>
+<tr><td>2014-02-19&nbsp;01:43:14</td><td>yselivanov</td><td>set</td><td>messages:
+  + <a rel="nofollow" href="msg211586">msg211586</a></td></tr>
+<tr><td>2014-02-19&nbsp;01:29:57</td><td>yselivanov</td><td>set</td><td>priority: normal -> release blocker</td></tr>
+<tr><td>2014-02-19&nbsp;01:28:57</td><td>haypo</td><td>set</td><td>nosy:
+  + <a rel="nofollow" href="user925">ronaldoussoren</a>, <a rel="nofollow" href="user5248">ned.deily</a>, <a rel="nofollow" href="user14695">hynek</a><br /></td></tr>
+<tr><td>2014-02-19&nbsp;01:21:35</td><td>python-dev</td><td>set</td><td>nosy:
+  + <a rel="nofollow" href="user13902">python-dev</a><br />messages:
+  + <a rel="nofollow" href="msg211584">msg211584</a><br /></td></tr>
+<tr><td>2014-02-19&nbsp;01:01:55</td><td>haypo</td><td>create</td><td></td></tr>
+</table>
+
+</div>
+
+
+</div> <!-- content-body -->
+<div id="footer">
+<div id="credits">
+<a href="http://www.python.org/about/website">Website maintained by the Python community</a><br />
+
+<a href="http://www.upfrontsystems.co.za/" title="issue tracker hosting provided by Upfront Systems, South Africa">hosting by Upfront Systems</a> /
+  <a href="http://roundup.sf.net" title="Powered by the Roundup Issue Tracker">powered by Roundup</a>
+</div> <!-- credits -->
+Copyright &copy; 1990-2013, <a href="http://python.org/psf">Python Software Foundation</a><br />
+<a href="http://python.org/about/legal">Legal Statements</a>
+</div> <!-- footer -->
+</div> <!-- body-main -->
+</div> <!-- content -->
+
+
+
+</body>
+</html>
+
