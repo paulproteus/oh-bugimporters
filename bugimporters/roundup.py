@@ -39,6 +39,9 @@ class RoundupBugImporter(BugImporter):
         super(RoundupBugImporter, self).__init__(*args, **kwargs)
         # Call the parent __init__.
 
+        if self.bug_parser is None:
+            self.bug_parser = RoundupBugParser 
+
     def process_queries(self, queries):
         # Add all the queries to the waiting list
         for query in queries:
@@ -211,6 +214,9 @@ class RoundupBugParser(object):
                '_project_name': tm.tracker_name,
                })
 
+        # Update status for trackers that set it differently
+        self.update_bug_status(ret, metadata_dict)
+
         # Check for the bitesized keyword
         if tm.bitesized_field:
             b_list = tm.bitesized_text.split(',')
@@ -229,3 +235,15 @@ class RoundupBugParser(object):
 
         # Then pass ret out
         return ret
+
+    # Do nothing in default case; inherited classes change the behaviour
+    def update_bug_status(self, ret, metadata_dict):
+        return
+ 
+### Custom bug parsers
+class PythonRoundupBugParser(RoundupBugParser):
+    def update_bug_status(self, ret, metadata_dict):
+        ret.update({
+            'status': metadata_dict['Stage'] if metadata_dict['Status'] == 'open' 
+                      else metadata_dict['Status'],
+            })
