@@ -102,6 +102,7 @@ class RoundupBugParser(object):
     def __init__(self, bug_url):
         self.bug_html = None
         self.bug_url = bug_url
+        self.submitter_realname_map = {}
 
     @cached_property
     def bug_html_url(self):
@@ -132,6 +133,18 @@ class RoundupBugParser(object):
             value = td.text_content().strip()
             ret[key] = value
 
+        ret["files"] = []
+        files=tree.find_class("files") #Grab files table by classname
+        print files
+        if files!=[]: #if I find an actual table (dosen't exist if no files)
+            files=files[0] #grab table, then tbody
+            files = files[2:] #Strip off the two header TRs
+            for file_entry in files:
+                ret["files"].append({
+                        "url":file_entry[0][0].attrib['href'],
+                        "author":file_entry[1][0].text
+                    })
+
         return ret
 
     def get_all_submitter_realname_pairs(self, tree):
@@ -148,7 +161,9 @@ class RoundupBugParser(object):
 
     def get_submitter_realname(self, tree, submitter_username):
         try:
-            return self.get_all_submitter_realname_pairs(tree)[submitter_username]
+            if self.submitter_realname_map=={}:
+                self.submitter_realname_map=self.get_all_submitter_realname_pairs(tree)
+            return self.submitter_realname_map[submitter_username]
         except KeyError:
             return None
 
@@ -212,6 +227,7 @@ class RoundupBugParser(object):
                'canonical_bug_link': self.bug_url,
                'last_polled': datetime.datetime.utcnow().isoformat(),
                '_project_name': tm.tracker_name,
+               'files': metadata_dict['files']
                })
 
         # Update status for trackers that set it differently
