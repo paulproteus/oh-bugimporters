@@ -100,7 +100,7 @@ class RoundupBugImporter(BugImporter):
 
 
 class RoundupBugParser(object):
-    def __init__(self, bug_url, extended_scrape):
+    def __init__(self, bug_url, extended_scrape=False):
         self.bug_html = None
         self.bug_url = bug_url
         self.submitter_realname_map = {}

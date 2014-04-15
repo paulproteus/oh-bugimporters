@@ -27,8 +27,9 @@ def main(raw_arguments):
 
     parser.add_argument('-i', action="store", dest="input")
     parser.add_argument('-o', action="store", dest="output")
-    parser.add_argument('--extended-scrape', action="store_const", dest="extended_scrape", const=True, default=False)
+    parser.add_argument('--extended-scrape', action="store_const", dest="extended_scrape", const="True", default="False")
     args = parser.parse_args(raw_arguments)
+
 
     args_for_scrapy = ['scrapy',
                        'runspider',
@@ -102,6 +103,11 @@ class BugImportSpider(scrapy.spider.BaseSpider):
                 bug_parser_class = None
                 # By passing None here, we ask the
                 # BugImporter object to use its default.
+
+            try:
+                self.extended_scrape==False
+            except AttributeError:
+                self.extended_scrape=False
 
             bug_importer = bug_import_class(
                 obj, reactor_manager=None,

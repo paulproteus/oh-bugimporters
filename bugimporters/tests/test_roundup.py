@@ -1,5 +1,6 @@
 import datetime
 import os
+import json
 
 import bugimporters.roundup
 from bugimporters.tests import ObjectFromDict
@@ -125,11 +126,21 @@ the module to the output. (Long live lambda.)""")
         self.assertEqual(bug['submitter_username'], 'benjhayden')
         self.assertEqual(bug['submitter_realname'], 'Ben Hayden')
         self.assertEqual(bug['canonical_bug_link'], 'http://mercurial.selenic.com/bts/issue1550')
-        self.assertEqual(bug['files'], [{'author': 'benjhayden', 'url': 'file8863/pydocbug.patch'}])
-        self.assertEqual(bug['messages'], [{'message': '<pre>Instead of listing installed modules, help(\'modules\') prints a "please\nwait" message, then a traceback noting that a module raised an exception\nduring import, then nothing else.\nThis happens in 2.5 and 2.6a0, but not in 2.4, which apparently doesn\'t\n__import__() EVERY module.\nTested only on Gentoo Linux 2.6.19, but same behavior is probable on\nother platforms because pydoc and pkgutil are written in cross-platform\nPython.\n\nProminent 3rd party libraries that break help(\'modules\') include Django,\nPyglet, wxPython, SymPy, and Pypy. Arguably, the bug is in those\nlibraries, but they have good reasons for their behavior. Also, the Unix\nphilosophy of forgiving input is a good one. Also, __import__()ing every\nmodule takes a significant run-time hit, especially if libraries compute\neg. configuration.\n\nThe patch utilizes a pre-existing hook in pkgutil to simply quietly add\nthe module to the output. (Long live lambda.)</pre>\n   \n', 'author': 'Ben Hayden (benjhayden)'}, {'message': '<pre>Committed the patch in <a href="http://svn.python.org/view?rev=59939&amp;view=rev">revision 59939</a>.\n\nI\'m not clear how it was determined that importing every module was\nnecessary in order to list the modules or scan their synopsis lines\n(this seems to have happened in <a href="http://svn.python.org/view?rev=45510&amp;view=rev">revision 45510</a>).  This can probably\nbe made more efficient in the future.</pre>\n   \n', 'author': 'Ka-Ping Yee (ping)'}])
         assert bug['good_for_newcomers']
         assert bug['looks_closed']
         return bug
+
+    def test_raw_data_dump_with_mercurial(self):
+        self.setup_class()
+        # Check the number of Bugs present.
+        rbp = bugimporters.roundup.RoundupBugParser(
+                bug_url='http://mercurial.selenic.com/bts/issue1550',
+                extended_scrape=True)
+        # Parse HTML document as if we got it from the web
+        bug = self.im.handle_bug_html(open(os.path.join(
+                    HERE, 'sample-data',
+                    'closed-mercurial-bug.html')).read(), rbp )
+        self.assertEqual(bug['raw_data'],{"files": [{"url": "file8863/pydocbug.patch", "author": "benjhayden"}], "Title": "help('modules') broken by several 3rd party libraries (svn patch attached)", "msg59852 - (view)": "Author: Ka-Ping Yee (ping)", "Priority": "normal", "Superseder": "", "Status": "resolved", "Description": "Edit", "Type": "behavior", "Author": "Date: 2008-01-13 11:32", "Date: 2007-12-03 16": "", "Dependencies": "", "User": "Action", "Date": "User", "Date: 2008-01-13 11": "", "Stage": "", "Assigned To": "ping", "Uploaded": "Description", "Nosy List": "benjhayden, ping\n     (2)", "Versions": "Python 3.0, Python 2.6, Python 2.5", "Edit": "Remove", "File name": "Uploaded", "Components": "Demos and Tools, Library (Lib)", "Action": "Args", "msg58131 - (view)": "Author: Ben Hayden (benjhayden)", "Resolution": "accepted", "Topics": "bitesized", "messages": [{"message": "<pre>Instead of listing installed modules, help('modules') prints a \"please\nwait\" message, then a traceback noting that a module raised an exception\nduring import, then nothing else.\nThis happens in 2.5 and 2.6a0, but not in 2.4, which apparently doesn't\n__import__() EVERY module.\nTested only on Gentoo Linux 2.6.19, but same behavior is probable on\nother platforms because pydoc and pkgutil are written in cross-platform\nPython.\n\nProminent 3rd party libraries that break help('modules') include Django,\nPyglet, wxPython, SymPy, and Pypy. Arguably, the bug is in those\nlibraries, but they have good reasons for their behavior. Also, the Unix\nphilosophy of forgiving input is a good one. Also, __import__()ing every\nmodule takes a significant run-time hit, especially if libraries compute\neg. configuration.\n\nThe patch utilizes a pre-existing hook in pkgutil to simply quietly add\nthe module to the output. (Long live lambda.)</pre>\n   \n", "author": "Ben Hayden (benjhayden)"}, {"message": "<pre>Committed the patch in <a href=\"http://svn.python.org/view?rev=59939&amp;view=rev\">revision 59939</a>.\n\nI'm not clear how it was determined that importing every module was\nnecessary in order to list the modules or scan their synopsis lines\n(this seems to have happened in <a href=\"http://svn.python.org/view?rev=45510&amp;view=rev\">revision 45510</a>).  This can probably\nbe made more efficient in the future.</pre>\n   \n", "author": "Ka-Ping Yee (ping)"}], "Keywords": "easy, patch"})
 
     def test_reimport_same_bug_works(self):
         self.setup_class()
