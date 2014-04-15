@@ -165,6 +165,8 @@ class RoundupBugParser(object):
                             "message":content
                         })
                 count+=1
+        import pprint
+        pprint.pprint(ret)
 
         return ret
 
@@ -248,12 +250,11 @@ class RoundupBugParser(object):
                'canonical_bug_link': self.bug_url,
                'last_polled': datetime.datetime.utcnow().isoformat(),
                '_project_name': tm.tracker_name,
-               'extended_scraped': self.extended_scrape
+               'raw_data':{}
                })
         if self.extended_scrape:
             logging.info("Adding Extended Scrape Values")
-            ret['files']=metadata_dict['files']
-            ret['messages']=metadata_dict['messages']
+            ret['raw_data']=metadata_dict
 
         # Update status for trackers that set it differently
         self.update_bug_status(ret, metadata_dict)
