@@ -26,3 +26,4 @@ class ParsedBug(scrapy.item.Item):
     concerns_just_documentation = scrapy.item.Field()
     files = scrapy.item.Field()
     messages = scrapy.item.Field()
+    extended_scraped = scrapy.item.Field()

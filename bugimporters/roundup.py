@@ -79,7 +79,7 @@ class RoundupBugImporter(BugImporter):
 
     def handle_bug_html_response(self, response):
         # Create a RoundupBugParser instance to store the bug data
-        rbp = RoundupBugParser(response.request.url)
+        rbp = RoundupBugParser(response.request.url, self.extended_scrape)
         return self.handle_bug_html(response.body, rbp)
 
     def handle_bug_html(self, bug_html, rbp):
@@ -97,10 +97,11 @@ class RoundupBugImporter(BugImporter):
 
 
 class RoundupBugParser(object):
-    def __init__(self, bug_url):
+    def __init__(self, bug_url, extended_scrape):
         self.bug_html = None
         self.bug_url = bug_url
         self.submitter_realname_map = {}
+        self.extended_scrape=extended_scrape
 
     @cached_property
     def bug_html_url(self):
@@ -160,7 +161,6 @@ class RoundupBugParser(object):
                             "author":author,
                             "message":content
                         })
-                    print "APPENDED"
                 count+=1
 
         return ret
@@ -245,9 +245,12 @@ class RoundupBugParser(object):
                'canonical_bug_link': self.bug_url,
                'last_polled': datetime.datetime.utcnow().isoformat(),
                '_project_name': tm.tracker_name,
-               'files': metadata_dict['files'],
-               'messages': metadata_dict['messages']
+               'extended_scraped': self.extended_scrape
                })
+        if self.extended_scrape:
+            logging.info("Adding Extended Scrape Values")
+            ret['files']=metadata_dict['files']
+            ret['messages']=metadata_dict['messages']
 
         # Check for the bitesized keyword
         if tm.bitesized_field:
