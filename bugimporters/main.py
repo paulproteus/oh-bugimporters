@@ -27,6 +27,7 @@ def main(raw_arguments):
 
     parser.add_argument('-i', action="store", dest="input")
     parser.add_argument('-o', action="store", dest="output")
+    parser.add_argument('--extended-scrape', action="store_const", dest="extended_scrape", const=True, default=False)
     args = parser.parse_args(raw_arguments)
 
     args_for_scrapy = ['scrapy',
@@ -44,6 +45,7 @@ def main(raw_arguments):
                        '-s', 'DEPTH_PRIORITY=1',
                        '-s', 'SCHEDULER_DISK_QUEUE=scrapy.squeue.PickleFifoDiskQueue',
                        '-s', 'SCHEDULER_MEMORY_QUEUE=scrapy.squeue.FifoMemoryQueue',
+                       '-a', 'extended_scrape=%s' % (args.extended_scrape)
                        ]
     return scrapy.cmdline.execute(args_for_scrapy)
 
@@ -104,7 +106,8 @@ class BugImportSpider(scrapy.spider.BaseSpider):
             bug_importer = bug_import_class(
                 obj, reactor_manager=None,
                 bug_parser=bug_parser_class,
-                data_transits=None)
+                data_transits=None,
+                extended_scrape=self.extended_scrape)
             yield (obj, bug_importer)
 
     def start_requests(self):
@@ -130,13 +133,17 @@ class BugImportSpider(scrapy.spider.BaseSpider):
                 logging.error("FYI, this bug importer does not support "
                               "process_bugs(). Fix it.")
 
-    def __init__(self, input_filename=None):
+    def __init__(self, input_filename=None, extended_scrape="False"):
         if input_filename is None:
             return
 
         with open(input_filename) as f:
             self.input_data = yaml.load(f)
 
+        if extended_scrape=="False":
+            self.extended_scrape=False
+        else:
+            self.extended_scrape=True
         # Sometimes, the data we are given is wrapped in {'objects': data}
         # Detect that, and work around it.
         if 'objects' in self.input_data:
