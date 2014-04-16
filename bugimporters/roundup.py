@@ -252,7 +252,7 @@ class RoundupBugParser(object):
                'canonical_bug_link': self.bug_url,
                'last_polled': datetime.datetime.utcnow().isoformat(),
                '_project_name': tm.tracker_name,
-               'raw_data':{}
+               'raw_data':{},
                })
         if self.extended_scrape:
             logging.info("Adding Extended Scrape Values")
