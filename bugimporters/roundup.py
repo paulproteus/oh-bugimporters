@@ -104,7 +104,7 @@ class RoundupBugParser(object):
         self.bug_html = None
         self.bug_url = bug_url
         self.submitter_realname_map = {}
-        self.extended_scrape=extended_scrape
+        self.extended_scrape = extended_scrape
 
     @cached_property
     def bug_html_url(self):
