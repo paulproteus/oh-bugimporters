@@ -19,7 +19,7 @@
 import logging
 import scrapy.http
 
-from atom.core import Parse
+import feedparser
 from gdata.projecthosting.data import IssuesFeed, IssueEntry
 
 import bugimporters.items
@@ -49,26 +49,28 @@ class GoogleBugImporter(BugImporter):
 
     def handle_query_atom(self, query_atom, just_these_bug_urls=None):
         # Turn the query_atom into an IssuesFeed.
-        try:
-            query_feed = Parse(query_atom, IssuesFeed)
-        except SyntaxError:
-            logging.warn("For what it is worth, query_atom caused us to crash.")
-            # FIXME: We should log the string that made us crash.
-            return
+        query_feed = feedparser.parse(query_atom)
+
+        # NOTE: we can probably still proceed even if the feed yells about
+        if query_feed['bozo']:
+            logging.warn('handle_query_atom may have failed: %s', query_feed['bozo_exception'])
+
         # If we learned about any bugs, go ask for data about them.
         return self.prepare_bug_urls(query_feed, just_these_bug_urls)
 
     def prepare_bug_urls(self, query_feed, just_these_bug_urls):
         # Convert the list of issues into a dict of bug URLs and issues.
         bug_dict = {}
-        for issue in query_feed.entry:
+        for issue in query_feed.entries:
             # Get the bug URL.
-            bug_url = issue.get_alternate_link().href
+            bug_url = issue.link
+
             # If we were told to filter for only certain bug URLs, then
             # we look at the URL and drop the ones that do not match.
             if ((just_these_bug_urls is not None) and
-                bug_url not in just_these_bug_urls):
+                    bug_url not in just_these_bug_urls):
                 continue
+
             # Add the issue to the bug_url_dict. This has the side-effect of
             # removing duplicate bug URLs, as later ones just overwrite earlier
             # ones.
@@ -86,12 +88,12 @@ class GoogleBugImporter(BugImporter):
         if just_these_bug_urls:
             for should_hear_about in just_these_bug_urls:
                 if should_hear_about in bug_dict:
-                    pass # great, we already reported about it.
+                    pass  # great, we already reported about it.
                 else:
                     b = bugimporters.items.ParsedBug({
-                            'canonical_bug_link': should_hear_about,
-                            '_no_update': True,
-                            })
+                        'canonical_bug_link': should_hear_about,
+                        '_no_update': True,
+                    })
                     yield b
 
     def process_bugs(self, bug_list, older_bug_data_url=None):
