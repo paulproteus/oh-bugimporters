@@ -104,11 +104,6 @@ class BugImportSpider(scrapy.spider.BaseSpider):
                 # By passing None here, we ask the
                 # BugImporter object to use its default.
 
-            try:
-                self.extended_scrape==False
-            except AttributeError:
-                self.extended_scrape=False
-
             bug_importer = bug_import_class(
                 obj, reactor_manager=None,
                 bug_parser=bug_parser_class,
@@ -140,16 +135,17 @@ class BugImportSpider(scrapy.spider.BaseSpider):
                               "process_bugs(). Fix it.")
 
     def __init__(self, input_filename=None, extended_scrape="False"):
+        if extended_scrape=="False":
+            self.extended_scrape=False
+        else:
+            self.extended_scrape=True
+
         if input_filename is None:
             return
 
         with open(input_filename) as f:
             self.input_data = yaml.load(f)
 
-        if extended_scrape=="False":
-            self.extended_scrape=False
-        else:
-            self.extended_scrape=True
         # Sometimes, the data we are given is wrapped in {'objects': data}
         # Detect that, and work around it.
         if 'objects' in self.input_data:

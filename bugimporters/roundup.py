@@ -137,7 +137,7 @@ class RoundupBugParser(object):
 
         ret["files"] = []
         files=tree.find_class("files") #Grab files table by classname
-        if files!=[]: #if I find an actual table (dosen't exist if no files)
+        if files: #if I find an actual table (dosen't exist if no files)
             files=files[0] #grab table, then tbody
             files = files[2:] #Strip off the two header TRs
             for file_entry in files:
@@ -148,7 +148,7 @@ class RoundupBugParser(object):
 
         ret["messages"] = []
         messages=tree.find_class("messages")[0]
-        if messages!=[]:
+        if messages:
             if "tbody" in lxml.html.tostring(messages):
                 messages=messages[0]
             messages=messages[1:]
