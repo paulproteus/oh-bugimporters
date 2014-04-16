@@ -140,7 +140,8 @@ the module to the output. (Long live lambda.)""")
         bug = self.im.handle_bug_html(open(os.path.join(
                     HERE, 'sample-data',
                     'closed-mercurial-bug.html')).read(), rbp )
-        self.assertEqual(bug['raw_data'],json.load(open('bugimporters/tests/sample-data/closed-mercurial-bug-rawdata.json')))
+        self.assertEqual(bug['raw_data'],
+            json.load(open('bugimporters/tests/sample-data/closed-mercurial-bug-rawdata.json')))
 
     def test_reimport_same_bug_works(self):
         self.setup_class()
