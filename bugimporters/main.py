@@ -135,7 +135,7 @@ class BugImportSpider(scrapy.spider.BaseSpider):
                               "process_bugs(). Fix it.")
 
     def __init__(self, input_filename=None, extended_scrape=0):
-        self.extended_scrape=int(extended_scrape)
+        self.extended_scrape = int(extended_scrape)
 
         if input_filename is None:
             return
