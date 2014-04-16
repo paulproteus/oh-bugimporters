@@ -136,9 +136,9 @@ class RoundupBugParser(object):
             ret[key] = value
 
         ret["files"] = []
-        files=tree.find_class("files") #Grab files table by classname
+        files = tree.find_class("files") #Grab files table by classname
         if files: #if I find an actual table (dosen't exist if no files)
-            files=files[0] #grab table, then tbody
+            files = files[0] #grab table, then tbody
             files = files[2:] #Strip off the two header TRs
             for file_entry in files:
                 ret["files"].append({
@@ -147,24 +147,24 @@ class RoundupBugParser(object):
                     })
 
         ret["messages"] = []
-        messages=tree.find_class("messages")[0]
+        messages = tree.find_class("messages")[0]
         if messages:
             if "tbody" in lxml.html.tostring(messages):
-                messages=messages[0]
-            messages=messages[1:]
-            count=0
-            author=""
-            while count!=len(messages):
-                if count%2==0:
-                    author=messages[count][1].text.replace("Author: ",'')
+                messages = messages[0]
+            messages = messages[1:]
+            count = 0
+            author = ""
+            while count != len(messages):
+                if count%2 == 0:
+                    author = messages[count][1].text.replace("Author: ",'')
                 else:
-                    content=lxml.etree.tostring(messages[count][0][0],
+                    content = lxml.etree.tostring(messages[count][0][0],
                         pretty_print=True)
                     ret["messages"].append({
                             "author":author,
                             "message":content
                         })
-                count+=1
+                count += 1
 
         return ret
 
@@ -182,8 +182,8 @@ class RoundupBugParser(object):
 
     def get_submitter_realname(self, tree, submitter_username):
         try:
-            if self.submitter_realname_map=={}:
-                self.submitter_realname_map=self.get_all_submitter_realname_pairs(tree)
+            if self.submitter_realname_map == {}:
+                self.submitter_realname_map = self.get_all_submitter_realname_pairs(tree)
             return self.submitter_realname_map[submitter_username]
         except KeyError:
             return None
