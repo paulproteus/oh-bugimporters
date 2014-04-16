@@ -136,10 +136,10 @@ class RoundupBugParser(object):
             ret[key] = value
 
         ret["files"] = []
-        files = tree.find_class("files") #Grab files table by classname
-        if files: #if I find an actual table (dosen't exist if no files)
-            files = files[0] #grab table, then tbody
-            files = files[2:] #Strip off the two header TRs
+        files = tree.find_class("files")  # Grab files table by classname
+        if files:  # if I find an actual table (dosen't exist if no files)
+            files = files[0]  # grab table, then tbody
+            files = files[2:]  # Strip off the two header TRs
             for file_entry in files:
                 ret["files"].append({
                         "url":file_entry[0][0].attrib['href'],
