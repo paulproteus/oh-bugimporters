@@ -91,11 +91,13 @@ class BugImporter(object):
     # Importer functions that may require overloading #
     ###################################################
     def __init__(self, tracker_model, reactor_manager=None, bug_parser=None,
-            data_transits=None):
+            data_transits=None, extended_scrape=False):
         # Store the tracker model
         self.tm = tracker_model
         # Store the reactor manager
         self.rm = reactor_manager
+        # Store whether or not to scrape messages, keywords, etc
+        self.extended_scrape = extended_scrape
         # Create a dictionary that maps URLs to a callback/errback pair. This
         # dictionary is used to store URLs that have been found and require
         # downloading, along with the callback and errback that handle the

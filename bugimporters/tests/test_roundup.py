@@ -1,5 +1,6 @@
 import datetime
 import os
+import json
 
 import bugimporters.roundup
 from bugimporters.tests import ObjectFromDict
@@ -128,6 +129,19 @@ the module to the output. (Long live lambda.)""")
         assert bug['good_for_newcomers']
         assert bug['looks_closed']
         return bug
+
+    def test_raw_data_dump_with_mercurial(self):
+        self.setup_class()
+        # Check the number of Bugs present.
+        rbp = bugimporters.roundup.RoundupBugParser(
+                bug_url='http://mercurial.selenic.com/bts/issue1550',
+                extended_scrape=True)
+        # Parse HTML document as if we got it from the web
+        bug = self.im.handle_bug_html(open(os.path.join(
+                    HERE, 'sample-data',
+                    'closed-mercurial-bug.html')).read(), rbp )
+        self.assertEqual(bug['raw_data'],
+            json.load(open('bugimporters/tests/sample-data/closed-mercurial-bug-rawdata.json')))
 
     def test_reimport_same_bug_works(self):
         self.setup_class()

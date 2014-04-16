@@ -24,3 +24,4 @@ class ParsedBug(scrapy.item.Item):
     as_appears_in_distribution = scrapy.item.Field()
     good_for_newcomers = scrapy.item.Field()
     concerns_just_documentation = scrapy.item.Field()
+    raw_data = scrapy.item.Field()
