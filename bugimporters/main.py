@@ -27,7 +27,7 @@ def main(raw_arguments):
 
     parser.add_argument('-i', action="store", dest="input")
     parser.add_argument('-o', action="store", dest="output")
-    parser.add_argument('--extended-scrape', action="store_const", dest="extended_scrape", const="True", default="False")
+    parser.add_argument('--extended-scrape', action="store_const", dest="extended_scrape", const=1, default=0)
     args = parser.parse_args(raw_arguments)
 
 
@@ -134,11 +134,8 @@ class BugImportSpider(scrapy.spider.BaseSpider):
                 logging.error("FYI, this bug importer does not support "
                               "process_bugs(). Fix it.")
 
-    def __init__(self, input_filename=None, extended_scrape="False"):
-        if extended_scrape=="False":
-            self.extended_scrape=False
-        else:
-            self.extended_scrape=True
+    def __init__(self, input_filename=None, extended_scrape=0):
+        self.extended_scrape=int(extended_scrape)
 
         if input_filename is None:
             return
