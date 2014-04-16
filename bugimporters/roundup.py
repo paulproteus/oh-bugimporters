@@ -165,8 +165,6 @@ class RoundupBugParser(object):
                             "message":content
                         })
                 count+=1
-        import pprint
-        pprint.pprint(ret)
 
         return ret
 
