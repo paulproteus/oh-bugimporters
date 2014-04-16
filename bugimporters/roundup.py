@@ -41,7 +41,7 @@ class RoundupBugImporter(BugImporter):
         # Call the parent __init__.
 
         if self.bug_parser is None:
-            self.bug_parser = RoundupBugParser 
+            self.bug_parser = RoundupBugParser
 
     def process_queries(self, queries):
         # Add all the queries to the waiting list
@@ -142,8 +142,8 @@ class RoundupBugParser(object):
             files = files[2:]  # Strip off the two header TRs
             for file_entry in files:
                 ret["files"].append({
-                        "url":file_entry[0][0].attrib['href'],
-                        "author":file_entry[1][0].text
+                        "url": file_entry[0][0].attrib['href'],
+                        "author": file_entry[1][0].text
                     })
 
         ret["messages"] = []
@@ -161,8 +161,8 @@ class RoundupBugParser(object):
                     content = lxml.etree.tostring(messages[count][0][0],
                         pretty_print=True)
                     ret["messages"].append({
-                            "author":author,
-                            "message":content
+                            "author": author,
+                            "message": content
                         })
                 count += 1
 
