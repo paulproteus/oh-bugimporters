@@ -155,7 +155,7 @@ class RoundupBugParser(object):
             count = 0
             author = ""
             while count != len(messages):
-                if count%2 == 0:
+                if count % 2 == 0:
                     author = messages[count][1].text.replace("Author: ",'')
                 else:
                     content = lxml.etree.tostring(messages[count][0][0],
@@ -256,7 +256,7 @@ class RoundupBugParser(object):
                })
         if self.extended_scrape:
             logging.info("Adding Extended Scrape Values")
-            ret['raw_data']=metadata_dict
+            ret['raw_data'] = metadata_dict
 
         # Update status for trackers that set it differently
         self.update_bug_status(ret, metadata_dict)
