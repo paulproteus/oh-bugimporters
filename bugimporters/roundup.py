@@ -232,6 +232,10 @@ class RoundupBugParser(object):
         for status_name in tm.closed_status.split(','):
             closed_status_set.add(status_name.strip().lower())
 
+        # NOTE: If you add more values to metadata_dict (or to raw_data in general) you need to rebuild 
+        # tests/sample-data/closed-mercurial-bug-rawdata.json using json.dumps so the test will not fail
+        # because you have a different raw_data
+
         ret = bugimporters.items.ParsedBug()
         ret.update({'title': metadata_dict['Title'],
                'description': description,
