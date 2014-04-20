@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://code.google.com/p/mock/issues/detail?id=157 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ 
+ <meta name="ROBOTS" content="NOARCHIVE">
+ 
+ <link rel="icon" type="image/vnd.microsoft.icon" href="https://ssl.gstatic.com/codesite/ph/images/phosting.ico">
+ 
+ 
+ <script src="./issue-detail-with-html_files/cb=gapi.loaded_0" async=""></script><script type="text/javascript" async="" src="./issue-detail-with-html_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+ 
+ 
+ 
+ 
+ var codesite_token = "EUwIaBYiEjs-emoUAer6etsfPyc:1397860894890";
+ 
+ 
+ var CS_env = {"assetHostPath": "https://ssl.gstatic.com/codesite/ph", "token": "EUwIaBYiEjs-emoUAer6etsfPyc:1397860894890", "domainName": null, "assetVersionPath": "https://ssl.gstatic.com/codesite/ph/4964405422594852395", "relativeBaseUrl": "", "profileUrl": "/u/110636330510916017185/", "projectHomeUrl": "/p/mock", "loggedInUserEmail": "shaun.duncan@gmail.com", "projectName": "mock"};
+ var _gaq = _gaq || [];
+ _gaq.push(
+ ['siteTracker._setAccount', 'UA-18071-1'],
+ ['siteTracker._trackPageview']);
+ 
+ _gaq.push(
+ ['projectTracker._setAccount', 'UA-6819289-1'],
+ ['projectTracker._trackPageview']);
+ 
+ (function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+ 
+ </script><script type="text/javascript" async="" src="./issue-detail-with-html_files/ga.js"></script>
+ 
+ 
+ <title>Issue 157 - 
+ mock -
+ 
+ Autospeccing should not copy spec from class to instance - 
+ A Python mock object library - Google Project Hosting
+ </title>
+ <link type="text/css" rel="stylesheet" href="./issue-detail-with-html_files/core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="./issue-detail-with-html_files/ph_detail.css">
+ 
+ 
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="https://ssl.gstatic.com/codesite/ph/4964405422594852395/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ 
+ 
+ .attachments { width:33%; border-top:2px solid #999; padding-top: 3px; margin-left: .7em;}
+ .attachments table { margin-bottom: 0.75em; }
+ .attachments table tr td { padding: 0; margin: 0; font-size: 95%; }
+ .preview { border: 2px solid #c3d9ff; padding: 1px; }
+ .preview:hover { border: 2px solid blue; }
+ .label { white-space: nowrap; }
+ .derived { font-style:italic }
+ .cursor_on .author {
+ background: url(https://ssl.gstatic.com/codesite/ph/images/show-arrow.gif) no-repeat 2px;
+ }
+ .hiddenform {
+ display: none;
+ }
+
+ 
+ </style>
+<link type="text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css"><script type="text/javascript" charset="utf-8" src="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/js/page_context.js"></script></head>
+<body class="t3" screen_capture_injected="true">
+<script type="text/javascript">
+ window.___gcfg = {lang: 'en'};
+ (function() 
+ {var po = document.createElement("script");
+ po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+ var s = document.getElementsByTagName("script")[0];
+ s.parentNode.insertBefore(po, s);
+ })();
+</script>
+<div class="headbg">
+
+ <div id="gaia">
+ 
+
+ <span>
+ 
+ 
+ 
+ <a href="https://code.google.com/p/mock/issues/detail?id=157#" id="multilogin-dropdown" onclick="return false;"><u><b>shaun.duncan@gmail.com</b></u> <small>▼</small></a>
+ 
+ 
+ | <a href="https://code.google.com/u/110636330510916017185/" id="projects-dropdown" onclick="return false;"><u>My favorites</u> <small>▼</small></a>
+ | <a href="https://code.google.com/u/110636330510916017185/" onclick="_CS_click(&#39;/gb/ph/profile&#39;);" title="Profile, Updates, and Settings"><u>Profile</u></a>
+ | <a href="https://www.google.com/accounts/Logout?continue=https%3A%2F%2Fcode.google.com%2Fp%2Fmock%2Fissues%2Fdetail%3Fid%3D157" onclick="_CS_click(&#39;/gb/ph/signout&#39;);"><u>Sign out</u></a>
+ 
+ </span>
+
+ </div>
+
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if lte IE 7]>
+<div style="text-align:center;">
+Your version of Internet Explorer is not supported. Try a browser that
+contributes to open source, such as <a href="http://www.firefox.com">Firefox</a>,
+<a href="http://www.google.com/chrome">Google Chrome</a>, or
+<a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a>.
+</div>
+<![endif]-->
+
+
+
+ <table style="padding:0px; margin: 0px 0px 10px 0px; width:100%" cellpadding="0" cellspacing="0" itemscope="" itemtype="http://schema.org/CreativeWork">
+ <tbody><tr style="height: 58px;">
+ 
+ 
+ 
+ <td id="plogo">
+ <link itemprop="url" href="https://code.google.com/p/mock">
+ <a href="https://code.google.com/p/mock/">
+ 
+ <img src="./issue-detail-with-html_files/defaultlogo.png" alt="Logo" itemprop="image">
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.5em">
+ 
+ <div id="pname">
+ <a href="https://code.google.com/p/mock/"><span itemprop="name">mock</span></a>
+ </div>
+ 
+ <div id="psum">
+ <a id="project_summary_link" href="https://code.google.com/p/mock/"><span itemprop="description">A Python mock object library</span></a>
+ 
+ </div>
+ 
+ 
+ </td>
+ <td style="white-space:nowrap;text-align:right; vertical-align:bottom;">
+ 
+ <form action="https://code.google.com/hosting/search">
+ <input size="30" name="q" value="" type="text">
+ 
+ <input type="submit" name="projectsearch" value="Search projects">
+ </form>
+ 
+ </td></tr>
+ </tbody></table>
+
+</div>
+
+ 
+<div id="mt" class="gtb"> 
+ <a href="https://code.google.com/p/mock/" class="tab ">Project&nbsp;Home</a>
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/mock/downloads/list" class="tab ">Downloads</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/mock/issues/list" class="tab active">Issues</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/mock/source/checkout" class="tab ">Source</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="gtbc"></div>
+</div>
+<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" class="st">
+ <tbody><tr>
+ 
+ 
+ 
+ 
+ 
+ <td class="subt">
+ <div class="issueDetail">
+<div class="isf">
+ 
+ 
+ <span class="inIssueEntry">
+ <a class="buttonify" href="https://code.google.com/p/mock/issues/entry" onclick="return _newIssuePrompt();">New issue</a>
+ </span> &nbsp;
+ 
+ <span class="inIssueList">
+ <span>Search</span>
+ <form action="https://code.google.com/p/mock/issues/list" method="GET" style="display:inline">
+ <select id="can" name="can">
+ 
+<option disabled="disabled">Search within:</option>
+<option value="1">&nbsp;All issues</option>
+<option value="2" selected="selected">&nbsp;Open issues</option>
+
+ <option value="3">&nbsp;Open and owned by me</option>
+ <option value="4">&nbsp;Open and reported by me</option>
+ <option value="5">&nbsp;Open and starred by me</option>
+ <option value="8">&nbsp;Open with comment by me</option>
+
+<option value="6">&nbsp;New issues</option>
+<option value="7">&nbsp;Issues to verify</option>
+
+ </select>
+ <span>for</span>
+ <span id="qq"><input type="text" size="38" id="searchq" name="q" value="" autocomplete="off" onkeydown="_blurOnEsc(event)"></span>
+ 
+ 
+ <span id="search_colspec"><input type="hidden" name="colspec" value="ID Type Status Priority Milestone Owner Summary"></span>
+ 
+ 
+ 
+ <input type="hidden" name="cells" value="tiles">
+ <input type="submit" value="Search">
+ </form>
+ </span> &nbsp;
+ <span class="inIssueAdvSearch">
+ <a href="https://code.google.com/p/mock/issues/advsearch">Advanced search</a>
+ </span> &nbsp;
+ <span class="inIssueSearchTips">
+ <a href="https://code.google.com/p/mock/issues/searchtips">Search tips</a>
+ </span> &nbsp;
+ <span class="inIssueSubscriptions">
+ <a href="https://code.google.com/p/mock/issues/subscriptions">Subscriptions</a>
+ </span>
+</div>
+</div>
+ </td>
+ 
+ 
+ 
+ 
+ <td align="right" valign="top" class="bevel-right"></td>
+ </tr>
+</tbody></table>
+
+
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+<div id="maincol">
+
+ 
+
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+ 
+
+<div id="color_control" class="">
+<div id="issueheader">
+<table cellpadding="0" cellspacing="0" width="100%"><tbody>
+ <tr>
+ <td class="vt h3" nowrap="nowrap" style="padding:0 5px">
+ 
+ 
+ 
+ 
+ <img width="15" height="15" src="./issue-detail-with-html_files/star_off.gif" style="cursor:pointer" id="star" title="Vote for this issue and get email change notifications" onclick="_toggleStar(this,&#39;&#39;,&#39;mock&#39;,157, codesite_token); _syncStarIcons(this, &#39;star2&#39;)">
+ 
+ 
+ Issue <a href="./issue-detail-with-html_files/issue-detail-with-html.html">157</a>:
+ </td>
+ <td width="90%" class="vt">
+ <span class="h3">Autospeccing should not copy spec from class to instance</span>
+ </td>
+ <td>
+ 
+ <div class="pagination">
+ <a href="https://code.google.com/p/mock/issues/detail?id=153" title="Prev">‹ Prev</a>
+ 19 of 67
+ <a href="https://code.google.com/p/mock/issues/detail?id=158" title="Next">Next ›</a>
+ </div>
+ </td>
+ </tr>
+ <tr>
+ <td></td>
+ <td nowrap="nowrap">
+ 
+ 
+ 1 person starred this issue and may be notified of changes.
+ 
+ 
+ 
+ </td>
+ <td align="center" nowrap="nowrap">
+ 
+ <a href="https://code.google.com/p/mock/issues/list?cursor=mock%3A157">Back to list</a>
+ 
+ </td>
+ </tr>
+ 
+</tbody></table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="issuepage" id="meta-container">
+<tbody class="collapse"> 
+ <tr>
+ <td id="issuemeta">
+ <div id="meta-float">
+ 
+<table cellspacing="0" cellpadding="0">
+ <tbody><tr><th align="left">Status:&nbsp;</th>
+ <td width="100%">
+ 
+ <span title="Issue has not had initial review yet">New</span>
+ 
+ </td>
+ </tr>
+ 
+ 
+ 
+ 
+ <tr><th align="left">Owner:&nbsp;</th><td>
+ 
+ 
+ ----
+ 
+ 
+ </td>
+ </tr>
+ 
+ 
+ 
+ <tr><td colspan="2">
+ 
+ 
+ 
+ <div style="padding-top:2px">
+ 
+ <a href="https://code.google.com/p/mock/issues/list?q=label:Type-Defect" title="Report of a software defect" class="label"><b>Type-</b>Defect</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ <div style="padding-top:2px">
+ 
+ <a href="https://code.google.com/p/mock/issues/list?q=label:Priority-Medium" title="Normal priority" class="label"><b>Priority-</b>Medium</a>
+ 
+ </div>
+ 
+ 
+ </td></tr>
+ 
+</tbody></table>
+<div class="rel_issues">
+ 
+ 
+ 
+</div>
+
+
+ <br><br>
+ 
+ 
+ 
+ 
+ <a href="javascript:_openIssueUpdateForm();">Add&nbsp;a&nbsp;comment&nbsp;below</a>
+ 
+ 
+ 
+ 
+
+
+ 
+ </div>&nbsp;
+ </td>
+ <td class="vt issuedescription" width="100%" id="cursorarea">
+ 
+<div class="cursor_off vt issuedescription" id="hc0">
+ 
+ 
+ <div class="author">
+ 
+ Reported by
+ 
+
+ <a class="userlink" href="https://code.google.com/u/105722262573912805429/">k...@k-bx.com</a>,
+ <span class="date" title="Fri May 11 07:52:54 2012">May 11, 2012</span>
+ 
+ </div>
+<pre><a href="https://gist.github.com/2660237" rel="nofollow">https://gist.github.com/2660237</a>
+
+I tried to mock django-form class, and then it's instance access to .cleaned_data would throw an AttributeError.
+
+Since most of object-attributes are added in __init__, I find that strange.
+
+Is it on purpose? Even if yes -- I velieve we should change that. Thanks.
+</pre>
+
+</div>
+
+ 
+
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc1">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri May 11 07:53:36 2012">
+ May 11, 2012
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c1" href="https://code.google.com/p/mock/issues/detail?id=157#c1">#1</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/105722262573912805429/">k...@k-bx.com</a></span>
+ 
+<pre>p.s.: as in past, I find that the best thing on this would be to remember spec of class-functions, but disable attributeerror on non-existing attributes access.
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc2">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri May 11 08:08:52 2012">
+ May 11, 2012
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c2" href="https://code.google.com/p/mock/issues/detail?id=157#c2">#2</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/fuzzyman/">fuzzyman</a></span>
+ 
+<pre>Well, it is deliberate - and even documented as one of the drawbacks of auto-speccing:
+
+<a href="http://www.voidspace.org.uk/python/mock/helpers.html#autospeccing" rel="nofollow">http://www.voidspace.org.uk/python/mock/helpers.html#autospeccing</a>
+
+Not throwing AttributeError on unknown attributes would negate what is really the *main point* of speccing - that it restricts the attributes available on mock objects. 
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc3">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri May 11 08:19:19 2012">
+ May 11, 2012
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c3" href="https://code.google.com/p/mock/issues/detail?id=157#c3">#3</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/105722262573912805429/">k...@k-bx.com</a></span>
+ 
+<pre>Ok, after some thoughts, I tend to agree here, actually. Maybe docs should be added. My main points are:
+
+1. if it's a rare case -- you should just add to-be-known attributes to your mock object. like
+a_M = create_autospec(A); a_M.cleaned_data = MagicMock()
+
+2. generally (not only in python), there should be value-objects and service-objects (which in python are mostly just functions), and value-objects should always be easy to construct/create and avoid doing something in __init__(). for hard constructing there's fabrics, and for doing something there are methods.
+
+The problem is that many frameworks / libs do not go with this methodics, but:
+1. it's a question to library / framework authors
+2. mock with autospec still lets you add attributes, so that solves everything.
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc4">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri May 11 08:26:08 2012">
+ May 11, 2012
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c4" href="https://code.google.com/p/mock/issues/detail?id=157#c4">#4</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/fuzzyman/">fuzzyman</a></span>
+ 
+<pre>RIght, I agree with you that this limitation makes auto-speccing less generally useful than it might be - and that attaching manually created mocks as attributes is probably the best workaround. I can add this to the docs.
+</pre>
+ 
+ 
+ </div>
+ 
+
+
+ 
+
+
+ </td>
+ </tr>
+
+ 
+
+</tbody>
+</table>
+<br>
+<script type="text/javascript" src="./issue-detail-with-html_files/dit_scripts.js"></script>
+
+
+
+ 
+ <div id="makechanges">
+ 
+ <div class="h4" style="margin-bottom: 0">Add a comment
+ 
+ </div>
+ <div id="makechangesarea" class="closed" style="margin-top:0; padding:5px">
+ 
+ <div class="updates" style="margin-bottom: 1em;">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div style="padding-left:5px; cursor:pointer" onclick="var star2=document.getElementById(&#39;star2&#39;);_toggleStar(star2,&#39;&#39;,&#39;mock&#39;,157, codesite_token); _syncStarIcons(star2, &#39;star&#39;)">
+ 
+ 
+ <img width="15" height="15" src="./issue-detail-with-html_files/star_off.gif" style="cursor:pointer" id="star2" title="Vote for this issue and get email change notifications">
+ <b id="vote_feedback">Vote for this issue and get email change notifications</b>
+ 
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ <div class="ifClosed">
+ <textarea onmousedown="_openIssueUpdateForm()" id="tempt" cols="85" rows="8" style="color:#666">Enter your comments</textarea>
+ </div>
+ <div class="ifOpened">
+ <form id="edit_issue_form" action="https://code.google.com/p/mock/issues/update.do?id=157" onsubmit="return _checkPlusOne() &amp;&amp; _checkUnrestrict(false)" method="POST" enctype="multipart/form-data">
+ <input type="hidden" name="_charset_" value="">
+ <input type="hidden" name="token" value="EUwIaBYiEjs-emoUAer6etsfPyc:1397860894890">
+ <input type="hidden" name="can" value="2">
+ <input type="hidden" name="q" value="">
+ <input type="hidden" name="colspec" value="ID Type Status Priority Milestone Owner Summary">
+ <input type="hidden" name="sort" value="">
+ <input type="hidden" name="groupby" value="">
+ <input type="hidden" name="start" value="0">
+ <input type="hidden" name="num" value="100">
+ <input type="hidden" name="pagegen" value="1397860894925182">
+ 
+ <table cellpadding="0" cellspacing="0" border="0">
+ <tbody><tr>
+ <td>
+ 
+ <textarea cols="85" rows="8" name="comment" id="addCommentTextArea" onkeyup="_dirty(); return true;"></textarea><br>
+ 
+ <div id="attachmentarea"></div>
+ <span id="attachprompt"><img width="15" height="15" src="./issue-detail-with-html_files/paperclip.gif" border="0"><a href="javascript:_addAttachmentFields('attachmentarea')" id="attachafile">Attach a file</a></span>
+ <span id="attachmaxsize" style="margin-left:2em; display:none">Max. attachments per comment: 10.0 MB</span><br>
+ 
+ 
+ <br>
+ </td>
+ 
+ <td valign="top">
+ <div class="tip">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ Each comment triggers notification emails.
+ So, please do not post
+ "<tt style="white-space:nowrap">+1 Me too!</tt>".<br>
+ Instead, click the star icon.
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ </td>
+ 
+ </tr>
+ <tr>
+ <td>
+ <table cellspacing="2" cellpadding="2" border="0" class="rowmajor">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <tbody><tr>
+ <td colspan="3">
+ <div id="confirmarea" class="novel"><span id="confirmmsg"></span></div>
+ <div id="blocksubmitarea" class="blockingsubmit"><span id="blocksubmitmsg"></span></div>
+ </td>
+</tr>
+
+ </tbody></table>
+ <input type="submit" id="submit" name="btn" onfocus="_acrob(null)" onmousedown="_acrob(null)" value="Save changes">
+ <input type="button" id="discard" name="nobtn" value="Discard" onfocus="_acrob(null)" onclick="_acrob(null); _confirmDiscardUpdate(&#39;detail?id=157&#39;); return false;">
+ 
+ 
+ </td>
+ </tr>
+ </tbody></table>
+ </form>
+ 
+ <form action="https://code.google.com/p/mock/issues/delete.do" method="POST" id="delete_form" class="hiddenform">
+ <input type="hidden" name="token" value="EUwIaBYiEjs-emoUAer6etsfPyc:1397860894890">
+ <input type="hidden" name="id" value="157">
+ <input type="hidden" name="delete" value="true">
+ </form>
+ </div>
+ </div>
+</div>
+<script type="text/javascript">
+ _allOrigLabels = [
+ "Type-Defect", "Priority-Medium", "", "", "",
+ "", "", "", "", "",
+ "", "", "", "", "",
+ "", "", "", "", "",
+ "", "", "", ""];
+ _lfidprefix = 'labeledit';
+</script>
+
+
+
+ 
+ 
+
+</div> 
+<form name="delcom" action="https://code.google.com/p/mock/issues/delComment.do?q=&can=2&groupby=&sort=&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary" method="POST">
+ <input type="hidden" name="sequence_num" value="">
+ <input type="hidden" name="mode" value="">
+ <input type="hidden" name="id" value="157">
+ <input type="hidden" name="token" value="EUwIaBYiEjs-emoUAer6etsfPyc:1397860894890">
+</form>
+
+<div id="helparea"></div>
+<script type="text/javascript">
+ _onload();
+ function delComment(sequence_num, delete_mode) {
+ var f = document.forms["delcom"];
+ f.sequence_num.value = sequence_num;
+ f.mode.value = delete_mode;
+ 
+ f.submit();
+ return false;
+ }
+ 
+ _floatMetadata();
+</script>
+<script type="text/javascript" src="./issue-detail-with-html_files/kibbles.js"></script>
+<script type="text/javascript">
+ _setupKibblesOnDetailPage(
+ 'https://code.google.com/p/mock/issues/list?cursor\x3dmock%3A157',
+ '/p/mock/issues/entry',
+ '../../mock/issues/detail?id\x3d153',
+ '../../mock/issues/detail?id\x3d158',
+ '', 'mock', 157,
+ true, true, codesite_token);
+</script>
+ 
+ 
+ 
+ <script type="text/javascript" src="./issue-detail-with-html_files/ph_core.js"></script>
+ 
+ 
+ 
+ 
+</div> 
+
+<div id="footer" dir="ltr">
+ <div class="text">
+ <a href="https://code.google.com/projecthosting/terms.html">Terms</a> -
+ <a href="http://www.google.com/privacy.html">Privacy</a> -
+ <a href="https://code.google.com/p/support/">Project Hosting Help</a>
+ </div>
+</div>
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Powered by <a href="http://code.google.com/projecthosting/">Google Project Hosting</a></span>
+ </div>
+
+ 
+ 
+
+
+ 
+ 
+
+
+<div class="menuDiv instance0" id="menuDiv-projects-dropdown" style="position: absolute; display: none; top: 19px; left: 878px;"><div class="menuCategory default" style="display: none;"></div><div class="menuCategory controls first"><hr class="menuSeparator"><a class="menuItem" href="https://code.google.com/hosting/" style="display: block;">Find open source projects...</a><a class="menuItem" href="https://code.google.com/hosting/createProject" style="display: block;">Create a project...</a></div></div><div class="menuDiv instance1" id="menuDiv-multilogin-dropdown" style="position: absolute; display: none; top: 19px; left: 686px;"><div class="menuCategory default first"><span class="menuText" style="display: block;"><b>shaun.duncan@gmail.com</b></span><a class="menuItem" href="https://code.google.com/p/mock/issues/detail?id=157&authuser=1" style="display: block;">shaun@shaunduncan.net</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a class="menuItem" href="http://www.google.com/accounts/AddSession?service=code&continue=https%3A%2F%2Fcode.google.com%2Fp%2Fmock%2Fissues%2Fdetail%3Fid%3D157" style="display: block;"><nobr>Sign in with another account...</nobr></a></div></div></body></html>

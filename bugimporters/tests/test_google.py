@@ -1,74 +1,297 @@
-import datetime
+import csv
 import os
 import mock
 
-from bugimporters.tests import Bug, ObjectFromDict
-from bugimporters.google import GoogleBugParser
-import bugimporters.trac
-import bugimporters.main
 import autoresponse
-from mock import Mock
+
+from bugimporters import google
+from bugimporters.main import BugImportSpider
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-# Create a global variable that can be referenced both from inside tests
-# and from module level functions functions.
-all_bugs = []
+
+class TestGoogleURLUtilsTestCase(object):
+
+    def test_google_name_from_url(self):
+        retval = google.google_name_from_url('http://code.google.com/p/foo')
+        assert 'foo' == retval
+
+    def test_google_bug_detail_url(self):
+        expected = 'https://code.google.com/p/foo/issues/detail?id=1'
+        assert expected == google.google_bug_detail_url('foo', 1)
 
 
-def delete_by_url(url):
-    for index, bug in enumerate(all_bugs):
-        if bug[0] == url:
-            del all_bugs[index]
-            break
+class TestGoogleBugImporter(object):
 
-bug_data_transit = {
-    'get_fresh_urls': lambda *args: {},
-    'update': lambda value: all_bugs.append(Bug(value)),
-    'delete_by_url': delete_by_url,
-}
+    def setup_method(self, method):
+        self.tracker_model = mock.Mock()
+        self.importer = google.GoogleBugImporter(self.tracker_model)
 
-trac_data_transit = {
-    'get_bug_times': lambda url: (None, None),
-    'get_timeline_url': Mock(),
-    'update_timeline': Mock()
-}
+        self.response = mock.Mock()
+        self.response.body = 'foobar'
+        self.response.meta = {'issue': ''}
+        self.response.request.url = 'http://code.google.com/p/myproj'
 
-importer_data_transits = {'bug': bug_data_transit, 'trac': trac_data_transit}
+    @mock.patch('bugimporters.google.scrapy.http')
+    def test_process_queries(self, scrapy):
+        queries = ['http://example.com']
+        retval = list(self.importer.process_queries(queries))
 
-class MockGoogleTrackerModel(mock.Mock):
-    tracker_name='SymPy'
-    google_name='sympy'
-    bitesized_type='label'
-    bitesized_text='EasyToFix'
-    documentation_type='label'
-    documentation_text='Documentation'
+        expected_call_kwargs = {
+            'url': queries[0],
+            'callback': self.importer.handle_query_csv,
+        }
 
-class TestGoogleBugImport(object):
+        request = retval[0]
+        request.http.Request.assertCalledWith(**expected_call_kwargs)
+
+    def test_handle_query_csv(self):
+        with mock.patch.object(self.importer, 'prepare_bug_urls') as prep:
+            self.importer.handle_query_csv(self.response)
+            args, kwargs = prep.call_args_list[0]
+            assert args[0] == 'myproj'
+            assert isinstance(args[1], csv.DictReader)
+
+    @mock.patch('bugimporters.google.scrapy.http')
+    def test_process_bugs(self, scrapy):
+        bug_list = [
+            ('http://code.google.com/p/foo/issues/detail?id=1', {}),
+        ]
+
+        retval = list(self.importer.process_bugs(bug_list))
+
+        expected_call_kwargs = {
+            'url': bug_list[0][0],
+            'meta': {'issue': bug_list[0][1]},
+            'callback': self.importer.handle_bug_html,
+        }
+
+        request = retval[0]
+        request.http.Request.assertCalledWith(**expected_call_kwargs)
+
+    def test_create_bug_dict_from_csv(self):
+        project = 'myproj'
+        csv_data = [
+            {'ID': '1', 'foo': 'bar'},
+            {'ID': '2', 'foo': 'baz'},
+            {'ID': '3', 'foo': 'qux'},
+        ]
+
+        expected = {
+            'https://code.google.com/p/myproj/issues/detail?id=1': csv_data[0],
+            'https://code.google.com/p/myproj/issues/detail?id=2': csv_data[1],
+            'https://code.google.com/p/myproj/issues/detail?id=3': csv_data[2],
+        }
+
+        retval = self.importer._create_bug_dict_from_csv(project, csv_data)
+
+        assert len(retval) == 3
+        assert retval == expected
+
+    @mock.patch('bugimporters.google.scrapy.http')
+    def test_create_bug_dict_from_csv_handles_paging(self, scrapy):
+        project = 'myproj'
+        example_line = ("This file is truncated to 100 out of 636 total results. "
+                        "See https://example.com/ for the next set of results.")
+        csv_data = [{'ID': example_line}]
+
+        self.importer._create_bug_dict_from_csv(project, csv_data)
+
+        expected_call_kwargs = {
+            'url': 'http://example.com/',
+            'callback': self.importer.handle_query_csv,
+        }
+
+        scrapy.http.Request.assertCalledWith(**expected_call_kwargs)
+
+    def test_handle_bug_html(self):
+        with mock.patch.object(google.GoogleBugParser, 'parse') as parse:
+            self.importer.handle_bug_html(self.response)
+            parse.assertCalledWith(self.tracker_model)
+
+    def test_prepare_bug_urls(self):
+        project = 'myproj'
+        csv_data = [{'ID': 1, 'foo': 'bar'}]
+
+        with mock.patch.object(self.importer, '_create_bug_dict_from_csv') as create_dict:
+            with mock.patch.object(self.importer, 'process_bugs') as process_bugs:
+                create_dict.return_value = {'foo': 'bar'}
+                process_bugs.return_value = [1, 2, 3]
+
+                retval = list(self.importer.prepare_bug_urls(project, csv_data))
+                assert retval == [1, 2, 3]
+
+
+class TestGoogleBugParser(object):
+
+    def setup_method(self, method):
+        self.tracker_model = mock.Mock(tracker_name='myproj',
+                                       bitesized_text='Easy',
+                                       bitesized_type='',
+                                       documentation_text='Docs',
+                                       documentation_type='')
+
+        self.response = mock.Mock()
+        self.response.body = 'foobar'
+        self.response.meta = {'issue': {}}
+        self.response.request.url = 'http://code.google.com/p/myproj'
+
+        self.parser = google.GoogleBugParser(self.response)
+
+    def test_count_people_involved(self):
+        self.parser.bug_data.update({
+            'Reporter': 'foo',
+            'Owner': 'bar',
+            'Cc': 'foo, bar, baz, qux',
+        })
+
+        assert 4 == self.parser._count_people_involved()
+
+    def test_parse_labels(self):
+        self.parser.bug_data['AllLabels'] = 'foo, bar, baz'
+        assert ['foo', 'bar', 'baz'] == self.parser._parse_labels()
+
+    def test_parse_labels_ignores_type_tags(self):
+        self.parser.bug_data['AllLabels'] = 'type-foo, name-bar, baz'
+        assert ['baz'] == self.parser._parse_labels()
+
+    def test_parse_description(self):
+        example = os.path.join(HERE,
+                               'sample-data',
+                               'google',
+                               'issue-detail.html')
+        self.response.body = open(example, 'r').read()
+
+        expected = ("Implement plus and minus infty, sign(x) doesn't work for "
+                    "-infty... The\nlimit code should handle +-infty correctly.")
+
+        assert expected == self.parser._parse_description()
+
+    def test_parse_description_removes_child_html_elements(self):
+        example = os.path.join(HERE,
+                               'sample-data',
+                               'google',
+                               'issue-detail-with-html.html')
+        self.response.body = open(example, 'r').read()
+
+        # We just need to be concerned on whether or not the test removes
+        # child html, so check startswith will suffice since the example
+        # data starts with a link
+        expected = "https://gist.github.com/2660237"
+
+        assert self.parser._parse_description().startswith(expected)
+
+    def test_parse(self):
+        # Get sample response data
+        example = os.path.join(HERE,
+                               'sample-data',
+                               'google',
+                               'issue-detail.html')
+        self.response.body = open(example, 'r').read()
+
+        # Get CSV contents of issue data for testing
+        csv_file = os.path.join(HERE,
+                                'sample-data',
+                                'google',
+                                'mock-issues-1.csv')
+
+        reader = csv.DictReader(open(csv_file, 'r'))
+        self.parser.bug_data = list(reader)[0]
+
+        # Data we expect
+        expected = {
+            'title': 'setup/teardown support',
+            'description': ("Implement plus and minus infty, sign(x) doesn't work for "
+                            "-infty... The\nlimit code should handle +-infty correctly."),
+            'status': 'Accepted',
+            'importance': 'Low',
+            'people_involved': 1,
+            'date_reported': '2010-06-10T09:49:27',
+            'last_touched': '2013-11-14T11:15:03',
+            'submitter_username': 'kon...@gmail.com',
+            'submitter_realname': '',
+            'canonical_bug_link': self.parser.bug_url,
+            '_project_name': 'myproj',
+            '_tracker_name': 'myproj',
+            'looks_closed': False,
+            'good_for_newcomers': False,
+            'concerns_just_documentation': False,
+        }
+
+        assert expected == self.parser.parse(self.tracker_model)
+
+    def test_parse_labels_bitesized(self):
+        self.tracker_model.bitesized_type = 'Label'
+        self.tracker_model.bitesized_text = 'Easy'
+
+        # Get sample response data
+        example = os.path.join(HERE,
+                               'sample-data',
+                               'google',
+                               'issue-detail.html')
+        self.response.body = open(example, 'r').read()
+
+        # Get CSV contents of issue data for testing
+        csv_file = os.path.join(HERE,
+                                'sample-data',
+                                'google',
+                                'mock-issues-1.csv')
+
+        reader = csv.DictReader(open(csv_file, 'r'))
+        self.parser.bug_data = list(reader)[1]
+
+        bug = self.parser.parse(self.tracker_model)
+        assert bug['good_for_newcomers']
+
+    def test_parse_labels_documentation(self):
+        self.tracker_model.documentation_type = 'Label'
+        self.tracker_model.bitesized_text = 'Docs'
+
+        # Get sample response data
+        example = os.path.join(HERE,
+                               'sample-data',
+                               'google',
+                               'issue-detail.html')
+        self.response.body = open(example, 'r').read()
+
+        # Get CSV contents of issue data for testing
+        csv_file = os.path.join(HERE,
+                                'sample-data',
+                                'google',
+                                'mock-issues-1.csv')
+
+        reader = csv.DictReader(open(csv_file, 'r'))
+        self.parser.bug_data = list(reader)[2]
+
+        bug = self.parser.parse(self.tracker_model)
+        assert bug['concerns_just_documentation']
+
+
+class FooGoogleBugImport(object):
     @staticmethod
     def assertEqual(x, y):
         assert x == y
 
     def test_top_to_bottom(self):
-        spider = bugimporters.main.BugImportSpider()
+        spider = BugImportSpider()
         spider.input_data = [dict(
-                    tracker_name='SymPy',
-                    google_name='sympy',
-                    bitesized_type='label',
-                    bitesized_text='EasyToFix',
-                    documentation_type='label',
-                    documentation_text='Documentation',
-                    bugimporter = 'google.GoogleBugImporter',
-                    queries=[
-                    'https://code.google.com/feeds/issues/p/sympy/issues/full?can=open&max-results=10000' +
-                    '&label=EasyToFix']
-                    )]
+            tracker_name='SymPy',
+            google_name='sympy',
+            bitesized_type='label',
+            bitesized_text='EasyToFix',
+            documentation_type='label',
+            documentation_text='Documentation',
+            bugimporter='google.GoogleBugImporter',
+            queries=[
+                'https://code.google.com/feeds/issues/p/sympy/issues/full?can=open&max-results=10000' +
+                '&label=EasyToFix'
+            ]
+        )]
         url2filename = {
             'https://code.google.com/feeds/issues/p/sympy/issues/full?can=open&max-results=10000&label=EasyToFix':
-                os.path.join(HERE, 'sample-data', 'google',
-                             'label-easytofix.atom'),
-            }
+                os.path.join(HERE, 'sample-data', 'google', 'label-easytofix.atom'),
+        }
         ar = autoresponse.Autoresponder(url2filename=url2filename,
                                         url2errors={})
         items = ar.respond_recursively(spider.start_requests())
@@ -197,7 +420,7 @@ I don't see for example the solvers module"""},
                 'status': {'text': 'Fixed'}
                 }
         bug_atom = ObjectFromDict(atom_dict, recursive=True)
-        gbp = GoogleBugParser(
+        gbp = google.GoogleBugParser(
                 bug_url='http://code.google.com/p/sympy/issues/detail?id=1215')
         gbp.bug_atom = bug_atom
 
@@ -247,7 +470,7 @@ I don't see for example the solvers module"""},
                 'status': {'text': 'Fixed'}
                 }
         bug_atom = ObjectFromDict(atom_dict, recursive=True)
-        gbp = GoogleBugParser(
+        gbp = google.GoogleBugParser(
                 bug_url='http://code.google.com/p/sympy/issues/detail?id=1215')
         gbp.bug_atom = bug_atom
 
@@ -297,7 +520,7 @@ I don't see for example the solvers module"""},
                 'status': {'text': 'Fixed'}
                 }
         bug_atom = ObjectFromDict(atom_dict, recursive=True)
-        gbp = GoogleBugParser(
+        gbp = google.GoogleBugParser(
                 bug_url='http://code.google.com/p/sympy/issues/detail?id=1215')
         gbp.bug_atom = bug_atom
 
@@ -347,7 +570,7 @@ I don't see for example the solvers module"""},
                 'status': None
                 }
         bug_atom = ObjectFromDict(atom_dict, recursive=True)
-        gbp = GoogleBugParser(
+        gbp = google.GoogleBugParser(
                 bug_url='http://code.google.com/p/sympy/issues/detail?id=1215')
         gbp.bug_atom = bug_atom
 
@@ -372,4 +595,3 @@ I don't see for example the solvers module""",
                   '_project_name': 'SymPy',
                   }
         self.assertEqual(wanted, got)
-
