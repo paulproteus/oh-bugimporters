@@ -65,15 +65,18 @@ class GoogleBugImporter(BugImporter):
 
         :param response: :class:`scrapy.http.Response`
         """
+        # This will be from older_bug_data CSVs
+        just_these_bug_urls = response.meta.get('bug_urls', None)
+
         project_name = google_name_from_url(response.request.url)
 
         # Turn the content into a csv reader
         query_csv = csv.DictReader(StringIO(response.body))
 
         # If we learned about any bugs, go ask for data about them.
-        return self.prepare_bug_urls(project_name, query_csv)
+        return self.prepare_bug_urls(project_name, query_csv, just_these_bug_urls)
 
-    def _create_bug_dict_from_csv(self, project_name, csv_data):
+    def _create_bug_dict_from_csv(self, project_name, csv_data, just_these_bug_urls=None):
         """
         Creates bug data dictionary for a given project name and a CSV
         DictReader. The result will be a mapping of google issue detail
@@ -97,6 +100,11 @@ class GoogleBugImporter(BugImporter):
             # Get the bug URL.
             bug_url = google_bug_detail_url(project_name, bug_id)
 
+            # If we were told to filter for only certain bug URLs, then
+            # we look at the URL and drop the ones that do not match.
+            if just_these_bug_urls and bug_url not in just_these_bug_urls:
+                continue
+
             # Add the issue to the bug_url_dict. This has the side-effect of
             # removing duplicate bug URLs, as later ones just overwrite earlier
             # ones.
@@ -104,7 +112,7 @@ class GoogleBugImporter(BugImporter):
 
         return bug_dict
 
-    def prepare_bug_urls(self, project_name, csv_data):
+    def prepare_bug_urls(self, project_name, csv_data, just_these_bug_urls=None):
         """
         Prepare a mapping of URL -> issue data. This will yield successive
         parsed bugs
@@ -118,12 +126,44 @@ class GoogleBugImporter(BugImporter):
         for parsed_bug in self.process_bugs(bug_dict.items()):
             yield parsed_bug
 
-    def process_bugs(self, bug_list):
+        # Now... if we were given a list of just_these_bug_urls, and one of them
+        # didn't report an update to us, let's indicate we want process_bugs()
+        # to generate a no-op report.
+        if just_these_bug_urls:
+            noop_urls = filter(lambda url: url not in bug_dict, just_these_bug_urls)
+            for url in noop_urls:
+                yield ParsedBug({
+                    'canonical_bug_link': url,
+                    '_no_update': True,
+                })
+
+    def process_bugs(self, bug_list, older_bugs_data_url=None):
+        if older_bugs_data_url:
+            for request in self.process_older_bugs(bug_list, older_bugs_data_url):
+                yield request
+            return
+
         for bug_url, issue_data in bug_list:
             req = scrapy.http.Request(url=bug_url,
                                       meta={'issue': issue_data},
                                       callback=self.handle_bug_html)
             yield req
+
+    def process_older_bugs(self, bug_list, older_bugs_data_url):
+        """
+        Process CSV URLs that contain ALL google bugs, not just open ones
+
+        :param bug_list: list of tuples (detail_url, issue_data)
+        :param older_bugs_data_url: URL to CSV of all bugs
+        """
+        request = scrapy.http.Request(url=older_bugs_data_url,
+                                      callback=self.handle_query_csv)
+
+        # For historical reasons, bug_list is a tuple of (url, data).
+        # We just want the URLs. self.handle_query_atom() will
+        # know how to properly filter these.
+        request.meta['bug_list'] = [url for url, _ in bug_list]
+        yield request
 
     def handle_bug_html(self, response):
         """
