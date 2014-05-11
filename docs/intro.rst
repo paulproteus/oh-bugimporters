@@ -49,9 +49,14 @@ If on Debian or Ubuntu, run::
  sudo apt-get build-dep python-lxml
  sudo apt-get install libffi-dev
 
-If on Windows or Mac OS, then you might run into some errors. If you
+When working with MacOS (10.9), a user reported a way to get started using both brew (a common package manager on Mac) and pip (if you run into any issues please let us know what you did to fix it!)::
+
+ brew install libxml2
+ pip install python-lxml
+
+If on Windows then you might run into some errors. If you
 get it working there, please let us know what commands make it work on
-those platforms.
+this platform!
 
 5. ``env/bin/python setup.py develop``
 
