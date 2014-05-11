@@ -38,6 +38,8 @@ following commands in your command prompt/terminal emulator.
    On Debian/Ubuntu systems, you'll need to run "``apt-get install
    python-virtualenv``" before this will work.
 
+   *Note*: If your on **OSX** (tested on 10.8.5) using ``virtualenv -p python2.7 env`` has shown to be successful.
+
 4. **Install compile-time dependences**
 
    If on Debian or Ubuntu, run::
@@ -47,9 +49,16 @@ following commands in your command prompt/terminal emulator.
       sudo apt-get install libffi-dev
       sudo apt-get install libssl-dev
 
-   If on Windows or Mac OS, then you might run into some errors. If you
-   get it working there, please let us know what commands make it work
-   on those platforms.
+   When working with MacOS (10.9), a user reported a way to get started using 
+   both brew (a common package manager on Mac) and pip (if you run into any 
+   issues please let us know what you did to fix it!)::
+   
+    brew install libxml2
+    pip install python-lxml
+   
+   If on Windows then you might run into some errors. If you
+   get it working there, please let us know what commands make it work on
+   this platform!
 
 5. **Build a working virtualenv**
 

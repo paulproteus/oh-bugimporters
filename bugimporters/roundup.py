@@ -82,7 +82,7 @@ class RoundupBugImporter(BugImporter):
 
     def handle_bug_html_response(self, response):
         # Create a RoundupBugParser instance to store the bug data
-        rbp = RoundupBugParser(response.request.url, self.extended_scrape)
+        rbp = self.bug_parser(response.request.url, self.extended_scrape)
         return self.handle_bug_html(response.body, rbp)
 
     def handle_bug_html(self, bug_html, rbp):
