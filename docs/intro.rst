@@ -35,11 +35,11 @@ following commands in your command prompt/terminal emulator.
 
      virtualenv env
 
-   On Debian/Ubuntu systems, you'll need to run "``apt-get install
+   *Note:* On Debian/Ubuntu systems, you'll need to run "``apt-get install
    python-virtualenv``" before this will work.
 
-   *Note*: If your on **OSX** (tested on 10.8.5) using ``virtualenv -p python2.7 env`` has shown to be successful.
-
+   *Note:* On **OSX** (tested on 10.8.5), you may need to use the more specific command ``virtualenv -p python2.7 env``.
+   
 4. **Install compile-time dependences**
 
    If on Debian or Ubuntu, run::
@@ -49,16 +49,14 @@ following commands in your command prompt/terminal emulator.
       sudo apt-get install libffi-dev
       sudo apt-get install libssl-dev
 
-   When working with MacOS (10.9), a user reported a way to get started using 
-   both brew (a common package manager on Mac) and pip (if you run into any 
-   issues please let us know what you did to fix it!)::
+   If on MacOS (10.9), a user reported the following way to get started using 
+   both brew (a common package manager on Mac) and pip::
    
     brew install libxml2
     pip install python-lxml
    
-   If on Windows then you might run into some errors. If you
-   get it working there, please let us know what commands make it work on
-   this platform!
+   If on Windows, then you might run into some errors. If you get this working 
+   there, please let us know what commands make it work on this platform!
 
 5. **Build a working virtualenv**
 
@@ -67,24 +65,17 @@ following commands in your command prompt/terminal emulator.
 
      env/bin/python setup.py develop
 
-   **Note**: If you run into a problem involving Scrapy and "uses_query",
-   then you are hitting a `bug involving Python 2.7.3 and scrapy`_. In
-   that case, you can make the virtualenv again with Python 2.6::
+   *Note*: You may run into errors here if software mirrors are down. If this 
+   is the case, you can alternatively run::
 
-     virtualenv -p python2.6 env
-
-   Python 2.7.6 should be fine too, for more modern Debian-like systems.
-   If you have to re-create the virtualenv, you should run the "develop"
-   command listed in above again. When you don't get an error, you can
-   continue.
+     env/bin/pip install -e .
 
 6. **Install the test framework**
 
-   This is optional, but hightly recommended::
+   This is optional, but hightly recommended, particularly if you want to run 
+   the tests::
 
      env/bin/pip install -r devrequirements.txt
-
-.. _bug involving Python 2.7.3 and scrapy: https://github.com/scrapy/scrapy/issues/144
 
 Running the test suite
 ======================
