@@ -14,7 +14,7 @@ This package is maintained by the OpenHatch community, so when you
 want to share code with us, you'll probably want to read the
 `OpenHatch patch contribution guide`_.
 
-.. _OpenHatch patch contribution guide: http://openhatch.readthedocs.org/en/latest/contributor/handling_patches.html
+.. _OpenHatch patch contribution guide: http://openhatch.readthedocs.org/en/latest/getting_started/handling_contributions.html
 
 Installation
 ============
@@ -23,56 +23,59 @@ If you want to use oh-bugimporters as a standalone Python package,
 which is the recommended way to develop it, you'll need to run the
 following commands in your command prompt/terminal emulator.
 
-Get the code:
+1. **Get the code**::
 
-1. ``git clone https://github.com/openhatch/oh-bugimporters.git``
+     git clone https://github.com/openhatch/oh-bugimporters.git
 
-Switch into its directory:
+2. **Switch into its directory**::
 
-2. ``cd oh-bugimporters``
+     cd oh-bugimporters
 
-Create a virtualenv for the project. (On Debian/Ubuntu systems, you'll
-need to run "apt-get install python-virtualenv" before this will work.)
+3. **Create a virtualenv for the project**::
 
-3. ``virtualenv env``
+     virtualenv env
 
-*Note*: If your on **OSX** (tested on 10.8.5) using ``virtualenv -p python2.7 env`` has shown to be successful.
+   *Note:* On Debian/Ubuntu systems, you'll need to run "``apt-get install
+   python-virtualenv``" before this will work.
 
-Tell the virtualenv we want to "develop" this app, which also has the
-side-effect of downloading and installing any dependencies.
+   *Note:* On **OSX** (tested on 10.8.5), you may need to use the more specific command ``virtualenv -p python2.7 env``.
+   
+4. **Install compile-time dependences**
 
-4. Install compile-time dependences
+   If on Debian or Ubuntu, run::
 
-If on Debian or Ubuntu, run::
+      sudo apt-get install libxml2-dev
+      sudo apt-get build-dep python-lxml
+      sudo apt-get install libffi-dev
+      sudo apt-get install libssl-dev
 
- sudo apt-get install libxml-dev
- sudo apt-get build-dep python-lxml
- sudo apt-get install libffi-dev
+   If on MacOS (10.9), a user reported the following way to get started using 
+   both brew (a common package manager on Mac) and pip::
+   
+    brew install libxml2
+    pip install python-lxml
+   
+   If on Windows, then you might run into some errors. If you get this working 
+   there, please let us know what commands make it work on this platform!
 
-When working with MacOS (10.9), a user reported a way to get started using both brew (a common package manager on Mac) and pip (if you run into any issues please let us know what you did to fix it!)::
+5. **Build a working virtualenv**
 
- brew install libxml2
- pip install python-lxml
+   Tell the virtualenv we want to "develop" this app, which also has the
+   side-effect of downloading and installing any dependencies.::
 
-If on Windows then you might run into some errors. If you
-get it working there, please let us know what commands make it work on
-this platform!
+     env/bin/python setup.py develop
 
-5. ``env/bin/python setup.py develop``
+   *Note*: You may run into errors here if software mirrors are down. If this 
+   is the case, you can alternatively run::
 
-*Note*: If you run into a problem involving Scrapy and "uses_query", then you are hitting a `bug involving Python 2.7.3 and scrapy`_. In that case, you should make the virtualenv again with Python 2.6::
+     env/bin/pip install -e .
 
-    virtualenv -p python2.6 env
+6. **Install the test framework**
 
-After you re-create the virtualenv, you should run the "develop"
-command listed in step 4 again, and now you won't get an error, so you
-can continue.
+   This is optional, but hightly recommended, particularly if you want to run 
+   the tests::
 
-.. _bug involving Python 2.7.3 and scrapy: https://github.com/scrapy/scrapy/issues/144
-
-Finally, install a few optional dependencies:
-
-6. ``env/bin/pip install -r devrequirements.txt``
+     env/bin/pip install -r devrequirements.txt
 
 Running the test suite
 ======================
@@ -81,7 +84,7 @@ This set of code comes with a set of automated tests that verify the
 behavior of the code. We like to keep the code in a clean state where
 all of those tests pass.
 
-You can run them as so::
+You can run them like so::
 
   env/bin/py.test
 
