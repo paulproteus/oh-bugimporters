@@ -34,8 +34,7 @@ class TestTracBugImporter(object):
 
     def setup_class(cls):
         cls.tm = TrackerModel()
-        cls.im = TracBugImporter(cls.tm, ReactorManager(),
-                data_transits=importer_data_transits)
+        cls.im = TracBugImporter(cls.tm, ReactorManager())
 
     def test_provide_existing_bug_urls(self):
         self.setup_class()
@@ -273,8 +272,7 @@ class TestTracBugParser(object):
 
     def setup_class(cls):
         cls.tm = TrackerModel()
-        cls.im = TracBugImporter(cls.tm, ReactorManager(),
-                data_transits=importer_data_transits)
+        cls.im = TracBugImporter(cls.tm, ReactorManager())
 
         # Set up the Twisted TrackerModels that will be used here.
         cls.tm = TrackerModel(
