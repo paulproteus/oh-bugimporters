@@ -53,7 +53,7 @@ following commands in your command prompt/terminal emulator.
    both brew (a common package manager on Mac) and pip::
    
     brew install libxml2
-    pip install python-lxml
+    env/bin/pip install lxml
    
    If on Windows, then you might run into some errors. If you get this working 
    there, please let us know what commands make it work on this platform!
