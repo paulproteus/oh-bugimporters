@@ -25,8 +25,6 @@ class BugImporter(object):
     #####################################################
     # Importer functions that don't require overloading #
     #####################################################
-    def log_error(self, failure):
-        failure.printTraceback()
 
     def get_next_waiting_url(self):
         # If there are no more waiting URLs, returns None.
