@@ -107,7 +107,6 @@ class BugImportSpider(scrapy.spider.BaseSpider):
             bug_importer = bug_import_class(
                 obj, reactor_manager=None,
                 bug_parser=bug_parser_class,
-                data_transits=None,
                 extended_scrape=self.extended_scrape)
             yield (obj, bug_importer)
 

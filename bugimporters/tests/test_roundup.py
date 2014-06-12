@@ -31,8 +31,7 @@ class TestRoundupBugImporter(object):
                 ))
         cls.im = bugimporters.roundup.RoundupBugImporter(
             cls.tm,
-            bugimporters.tests.ReactorManager(),
-            data_transits=None)
+            bugimporters.tests.ReactorManager())
 
     def test_bug_import_works_with_comma_separated_closed_status(self):
         self.setup_class()
@@ -168,8 +167,7 @@ class TestRoundupBugsFromPythonProject(object):
                 ))
         cls.im = bugimporters.roundup.RoundupBugImporter(
             cls.tm,
-            bugimporters.tests.ReactorManager(),
-            data_transits=None)
+            bugimporters.tests.ReactorManager())
 
     def test_bug_import_open(self):
         # Check the number of Bugs present.
