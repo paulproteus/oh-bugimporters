@@ -226,7 +226,7 @@ class GoogleBugParser(object):
         """
         Parse bug labels from the issue data. Labels will be a comma
         delimited list of string that are either of the form <type>-<name>
-        or <label>. This method will parse and return the later
+        or <label>. This method will parse and return the latter.
         """
         labels = []
 
