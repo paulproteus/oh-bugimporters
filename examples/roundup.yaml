@@ -1,0 +1,12 @@
+- as_appears_in_distribution: !!python/unicode ''
+  base_url: !!python/unicode 'http://openhatch.org/bugs/'
+  bitesized_field: !!python/unicode ''
+  bitesized_text: !!python/unicode ''
+  bugimporter: !!python/unicode 'roundup'
+  closed_status: !!python/unicode 'closed'
+  custom_parser: !!python/unicode ''
+  documentation_field: !!python/unicode 'Component'
+  documentation_text: !!python/unicode 'Documentation'
+  existing_bug_urls: ['http://openhatch.org/bugs/issue955']
+  queries: []
+  tracker_name: !!python/unicode 'Roundup'

@@ -19,6 +19,7 @@
 import datetime
 import logging
 import lxml.html
+import lxml.etree
 import re
 import urlparse
 import scrapy.http
@@ -38,6 +39,9 @@ class RoundupBugImporter(BugImporter):
     def __init__(self, *args, **kwargs):
         super(RoundupBugImporter, self).__init__(*args, **kwargs)
         # Call the parent __init__.
+
+        if self.bug_parser is None:
+            self.bug_parser = RoundupBugParser
 
     def process_queries(self, queries):
         # Add all the queries to the waiting list
@@ -78,7 +82,7 @@ class RoundupBugImporter(BugImporter):
 
     def handle_bug_html_response(self, response):
         # Create a RoundupBugParser instance to store the bug data
-        rbp = RoundupBugParser(response.request.url)
+        rbp = self.bug_parser(response.request.url, self.extended_scrape)
         return self.handle_bug_html(response.body, rbp)
 
     def handle_bug_html(self, bug_html, rbp):
@@ -96,9 +100,11 @@ class RoundupBugImporter(BugImporter):
 
 
 class RoundupBugParser(object):
-    def __init__(self, bug_url):
+    def __init__(self, bug_url, extended_scrape=False):
         self.bug_html = None
         self.bug_url = bug_url
+        self.submitter_realname_map = {}
+        self.extended_scrape = extended_scrape
 
     @cached_property
     def bug_html_url(self):
@@ -129,6 +135,37 @@ class RoundupBugParser(object):
             value = td.text_content().strip()
             ret[key] = value
 
+        ret["files"] = []
+        files = tree.find_class("files")  # Grab files table by classname
+        if files:  # if I find an actual table (dosen't exist if no files)
+            files = files[0]  # grab table, then tbody
+            files = files[2:]  # Strip off the two header TRs
+            for file_entry in files:
+                ret["files"].append({
+                        "url": file_entry[0][0].attrib['href'],
+                        "author": file_entry[1][0].text
+                    })
+
+        ret["messages"] = []
+        messages = tree.find_class("messages")[0]
+        if messages:
+            if "tbody" in lxml.html.tostring(messages):
+                messages = messages[0]
+            messages = messages[1:]
+            count = 0
+            author = ""
+            while count != len(messages):
+                if count % 2 == 0:
+                    author = messages[count][1].text.replace("Author: ",'')
+                else:
+                    content = lxml.etree.tostring(messages[count][0][0],
+                        pretty_print=True)
+                    ret["messages"].append({
+                            "author": author,
+                            "message": content
+                        })
+                count += 1
+
         return ret
 
     def get_all_submitter_realname_pairs(self, tree):
@@ -145,7 +182,9 @@ class RoundupBugParser(object):
 
     def get_submitter_realname(self, tree, submitter_username):
         try:
-            return self.get_all_submitter_realname_pairs(tree)[submitter_username]
+            if self.submitter_realname_map == {}:
+                self.submitter_realname_map = self.get_all_submitter_realname_pairs(tree)
+            return self.submitter_realname_map[submitter_username]
         except KeyError:
             return None
 
@@ -193,6 +232,10 @@ class RoundupBugParser(object):
         for status_name in tm.closed_status.split(','):
             closed_status_set.add(status_name.strip().lower())
 
+        # NOTE: If you add more values to metadata_dict (or to raw_data in general) you need to rebuild 
+        # tests/sample-data/closed-mercurial-bug-rawdata.json using json.dumps so the test will not fail
+        # because you have a different raw_data
+
         ret = bugimporters.items.ParsedBug()
         ret.update({'title': metadata_dict['Title'],
                'description': description,
@@ -209,7 +252,14 @@ class RoundupBugParser(object):
                'canonical_bug_link': self.bug_url,
                'last_polled': datetime.datetime.utcnow().isoformat(),
                '_project_name': tm.tracker_name,
+               'raw_data':{},
                })
+        if self.extended_scrape:
+            logging.info("Adding Extended Scrape Values")
+            ret['raw_data'] = metadata_dict
+
+        # Update status for trackers that set it differently
+        self.update_bug_status(ret, metadata_dict)
 
         # Check for the bitesized keyword
         if tm.bitesized_field:
@@ -229,3 +279,15 @@ class RoundupBugParser(object):
 
         # Then pass ret out
         return ret
+
+    # Do nothing in default case; inherited classes change the behaviour
+    def update_bug_status(self, ret, metadata_dict):
+        return
+ 
+### Custom bug parsers
+class PythonRoundupBugParser(RoundupBugParser):
+    def update_bug_status(self, ret, metadata_dict):
+        ret.update({
+            'status': metadata_dict['Stage'] if metadata_dict['Status'] == 'open' 
+                      else metadata_dict['Status'],
+            })

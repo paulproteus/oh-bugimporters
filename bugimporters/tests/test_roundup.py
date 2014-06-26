@@ -1,5 +1,6 @@
 import datetime
 import os
+import json
 
 import bugimporters.roundup
 from bugimporters.tests import ObjectFromDict
@@ -30,8 +31,7 @@ class TestRoundupBugImporter(object):
                 ))
         cls.im = bugimporters.roundup.RoundupBugImporter(
             cls.tm,
-            bugimporters.tests.ReactorManager(),
-            data_transits=None)
+            bugimporters.tests.ReactorManager())
 
     def test_bug_import_works_with_comma_separated_closed_status(self):
         self.setup_class()
@@ -129,6 +129,19 @@ the module to the output. (Long live lambda.)""")
         assert bug['looks_closed']
         return bug
 
+    def test_raw_data_dump_with_mercurial(self):
+        self.setup_class()
+        # Check the number of Bugs present.
+        rbp = bugimporters.roundup.RoundupBugParser(
+                bug_url='http://mercurial.selenic.com/bts/issue1550',
+                extended_scrape=True)
+        # Parse HTML document as if we got it from the web
+        bug = self.im.handle_bug_html(open(os.path.join(
+                    HERE, 'sample-data',
+                    'closed-mercurial-bug.html')).read(), rbp )
+        self.assertEqual(bug['raw_data'],
+            json.load(open('bugimporters/tests/sample-data/closed-mercurial-bug-rawdata.json')))
+
     def test_reimport_same_bug_works(self):
         self.setup_class()
         bug1 = self.test_new_mercurial_bug_import()
@@ -154,12 +167,11 @@ class TestRoundupBugsFromPythonProject(object):
                 ))
         cls.im = bugimporters.roundup.RoundupBugImporter(
             cls.tm,
-            bugimporters.tests.ReactorManager(),
-            data_transits=None)
+            bugimporters.tests.ReactorManager())
 
-    def test_bug_import(self):
+    def test_bug_import_open(self):
         # Check the number of Bugs present.
-        rbp = bugimporters.roundup.RoundupBugParser(
+        rbp = bugimporters.roundup.PythonRoundupBugParser(
                 bug_url='http://bugs.python.org/issue8264')
         # Parse HTML document as if we got it from the web
         bug = self.im.handle_bug_html(open(os.path.join(
@@ -168,3 +180,15 @@ class TestRoundupBugsFromPythonProject(object):
 
         self.assertEqual(bug['_project_name'], 'Python')
         self.assertEqual(bug['title'], "hasattr doensn't show private (double underscore) attributes exist")
+        self.assertEqual(bug['status'], 'needs patch')
+
+    def test_bug_import_closed(self):
+        rbp = bugimporters.roundup.PythonRoundupBugParser(
+                bug_url='http://bugs.python.org/issue20682')
+        bug = self.im.handle_bug_html(open(os.path.join(
+                        HERE, 'sample-data',
+                        'python-roundup-20682.html')).read(), rbp)
+
+        self.assertEqual(bug['_project_name'], 'Python')
+        self.assertEqual(bug['title'], "test_create_ssl_unix_connection() of test_asyncio failed on \"x86 Tiger 3.x\"")
+        self.assertEqual(bug['status'], 'closed')
