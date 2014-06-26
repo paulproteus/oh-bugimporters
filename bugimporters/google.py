@@ -40,8 +40,10 @@ def google_name_from_url(url):
 
 
 def google_bug_detail_url(project_name, bug_id):
-    return 'https://code.google.com/p/{project}/issues/detail?id={id}'.format(
-        project=project_name, id=bug_id
+    return (
+        'https://code.google.com/p/{project}/issues/detail?id={id}'.format(
+            project=project_name, id=bug_id
+        )
     )
 
 
@@ -68,15 +70,20 @@ class GoogleBugImporter(BugImporter):
         # This will be from older_bug_data CSVs
         just_these_bug_urls = response.meta.get('bug_urls', None)
 
-        project_name = google_name_from_url(response.request.url)
+        project_name = google_name_from_url(
+            response.request.url,
+        )
 
         # Turn the content into a csv reader
         query_csv = csv.DictReader(StringIO(response.body))
 
         # If we learned about any bugs, go ask for data about them.
-        return self.prepare_bug_urls(project_name, query_csv, just_these_bug_urls)
+        return self.prepare_bug_urls(project_name,
+                                     query_csv,
+                                     just_these_bug_urls)
 
-    def _create_bug_dict_from_csv(self, project_name, csv_data, just_these_bug_urls=None):
+    def _create_bug_dict_from_csv(self, project_name, csv_data,
+                                  just_these_bug_urls=None):
         """
         Creates bug data dictionary for a given project name and a CSV
         DictReader. The result will be a mapping of google issue detail
@@ -93,12 +100,17 @@ class GoogleBugImporter(BugImporter):
 
             # Check if this line is a notice about CSV pagination
             if not re.match(r'^\d+$', str(bug_id)):
-                next_url = re.findall(r'See (.+?) for the next set of results', bug_id)[0]
-                scrapy.http.Request(url=next_url, callback=self.handle_query_csv)
+                next_url = re.findall(
+                    r'See (.+?) for the next set of results', bug_id)[0]
+                scrapy.http.Request(
+                    url=next_url, callback=self.handle_query_csv)
                 continue
 
             # Get the bug URL.
-            bug_url = google_bug_detail_url(project_name, bug_id)
+            bug_url = google_bug_detail_url(
+                project_name,
+                bug_id,
+            )
 
             # If we were told to filter for only certain bug URLs, then
             # we look at the URL and drop the ones that do not match.
@@ -112,7 +124,8 @@ class GoogleBugImporter(BugImporter):
 
         return bug_dict
 
-    def prepare_bug_urls(self, project_name, csv_data, just_these_bug_urls=None):
+    def prepare_bug_urls(self, project_name, csv_data,
+                         just_these_bug_urls=None):
         """
         Prepare a mapping of URL -> issue data. This will yield successive
         parsed bugs
@@ -126,11 +139,12 @@ class GoogleBugImporter(BugImporter):
         for parsed_bug in self.process_bugs(bug_dict.items()):
             yield parsed_bug
 
-        # Now... if we were given a list of just_these_bug_urls, and one of them
-        # didn't report an update to us, let's indicate we want process_bugs()
-        # to generate a no-op report.
+        # Now... if we were given a list of just_these_bug_urls, and one of
+        # them didn't report an update to us, let's indicate we want
+        # process_bugs() to generate a no-op report.
         if just_these_bug_urls:
-            noop_urls = filter(lambda url: url not in bug_dict, just_these_bug_urls)
+            noop_urls = filter(
+                lambda url: url not in bug_dict, just_these_bug_urls)
             for url in noop_urls:
                 yield ParsedBug({
                     'canonical_bug_link': url,
@@ -139,7 +153,8 @@ class GoogleBugImporter(BugImporter):
 
     def process_bugs(self, bug_list, older_bugs_data_url=None):
         if older_bugs_data_url:
-            for request in self.process_older_bugs(bug_list, older_bugs_data_url):
+            for request in self.process_older_bugs(bug_list,
+                                                   older_bugs_data_url):
                 yield request
             return
 
@@ -234,11 +249,13 @@ class GoogleBugParser(object):
         :returns: bug description string
         """
         # NOTE: Using the combination of text/type makes for better testing
-        selector = scrapy.selector.Selector(text=self.response.body, type='html')
+        selector = scrapy.selector.Selector(
+            text=self.response.body, type='html')
 
         # This mysterious bit will get all the text for the item description
         # but will also make sure we don't have any html tags
-        xpath = '//div[contains(@class, "issuedescription")]/pre/descendant-or-self::*/text()'
+        xpath = ('//div[contains(@class, "issuedescription")]/'
+                 'pre/descendant-or-self::*/text()')
         desc = ''.join(selector.xpath(xpath).extract())
 
         # Remove stray HTML tags
@@ -259,8 +276,10 @@ class GoogleBugParser(object):
             'status': self.bug_data['Status'],
             'importance': self.bug_data['Priority'],
             'people_involved': self._count_people_involved(),
-            'date_reported': string2naive_datetime(self.bug_data['Opened']).isoformat(),
-            'last_touched': string2naive_datetime(self.bug_data['Modified']).isoformat(),
+            'date_reported': string2naive_datetime(
+                self.bug_data['Opened']).isoformat(),
+            'last_touched': string2naive_datetime(
+                self.bug_data['Modified']).isoformat(),
             'submitter_username': self.bug_data['Reporter'],
             'submitter_realname': '',  # Can't get this from Google
             'canonical_bug_link': self.bug_url,
@@ -281,6 +300,7 @@ class GoogleBugParser(object):
         # Check whether this is a documentation bug.
         if tracker_model.documentation_type:
             d_list = tracker_model.documentation_text.split(',')
-            data['concerns_just_documentation'] = any(d in labels for d in d_list)
+            data['concerns_just_documentation'] = any(
+                d in labels for d in d_list)
 
         return ParsedBug(data)
