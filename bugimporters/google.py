@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import csv
+import unicodecsv
 import re
 
 from cStringIO import StringIO
@@ -75,7 +75,7 @@ class GoogleBugImporter(BugImporter):
         )
 
         # Turn the content into a csv reader
-        query_csv = csv.DictReader(StringIO(response.body))
+        query_csv = unicodecsv.DictReader(StringIO(response.body))
 
         # If we learned about any bugs, go ask for data about them.
         return self.prepare_bug_urls(project_name,
@@ -90,7 +90,7 @@ class GoogleBugImporter(BugImporter):
         URL -> full CSV data for the bug
 
         :param project_name: The google project name
-        :param csv_data: a csv.DictReader object (or an iterable of dicts)
+        :param csv_data: a unicodecsv.DictReader object (or iterable of dicts)
         :returns: dict mapping of detail URL -> CSV issue data
         """
         bug_dict = {}
