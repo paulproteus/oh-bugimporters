@@ -89,8 +89,9 @@ class TestGoogleBugImporter(object):
     @mock.patch('bugimporters.google.scrapy.http')
     def test_create_bug_dict_from_csv_handles_paging(self, scrapy):
         project = 'myproj'
-        example_line = ("This file is truncated to 100 out of 636 total results. "
-                        "See https://example.com/ for the next set of results.")
+        example_line = ("This file is truncated to 100 out of 636 total "
+                        "results. See https://example.com/ for the next set "
+                        "of results.")
         csv_data = [{'ID': example_line}]
 
         self.importer._create_bug_dict_from_csv(project, csv_data)
@@ -118,7 +119,9 @@ class TestGoogleBugImporter(object):
             'https://code.google.com/p/myproj/issues/detail?id=2': csv_data[1],
         }
 
-        retval = self.importer._create_bug_dict_from_csv(project, csv_data, just_these)
+        retval = self.importer._create_bug_dict_from_csv(project,
+                                                         csv_data,
+                                                         just_these)
 
         assert len(retval) == 2
         assert retval == expected
@@ -132,12 +135,15 @@ class TestGoogleBugImporter(object):
         project = 'myproj'
         csv_data = [{'ID': 1, 'foo': 'bar'}]
 
-        with mock.patch.object(self.importer, '_create_bug_dict_from_csv') as create_dict:
-            with mock.patch.object(self.importer, 'process_bugs') as process_bugs:
+        with mock.patch.object(self.importer, '_create_bug_dict_from_csv') \
+                as create_dict:
+            with mock.patch.object(self.importer, 'process_bugs') \
+                    as process_bugs:
                 create_dict.return_value = {'foo': 'bar'}
                 process_bugs.return_value = [1, 2, 3]
 
-                retval = list(self.importer.prepare_bug_urls(project, csv_data))
+                retval = list(self.importer.prepare_bug_urls(project,
+                                                             csv_data))
                 assert retval == [1, 2, 3]
 
     def test_prepare_bug_urls_yields_noops(self):
@@ -145,12 +151,16 @@ class TestGoogleBugImporter(object):
         csv_data = [{'ID': '1', 'foo': 'bar'}]
         just_these = ['baz']
 
-        with mock.patch.object(self.importer, '_create_bug_dict_from_csv') as create_dict:
-            with mock.patch.object(self.importer, 'process_bugs') as process_bugs:
+        with mock.patch.object(self.importer, '_create_bug_dict_from_csv') \
+                as create_dict:
+            with mock.patch.object(self.importer, 'process_bugs') \
+                    as process_bugs:
                 create_dict.return_value = {'foo': 'bar'}
                 process_bugs.return_value = [1]
 
-                retval = list(self.importer.prepare_bug_urls(project, csv_data, just_these))
+                retval = list(self.importer.prepare_bug_urls(project,
+                                                             csv_data,
+                                                             just_these))
                 assert len(retval) == 2
                 assert retval[1]['canonical_bug_link'] == 'baz'
                 assert retval[1]['_no_update']
@@ -197,7 +207,8 @@ class TestGoogleBugParser(object):
         self.response.body = open(example, 'r').read()
 
         expected = ("Implement plus and minus infty, sign(x) doesn't work for "
-                    "-infty... The\nlimit code should handle +-infty correctly.")
+                    "-infty... The\nlimit code should handle +-infty "
+                    "correctly.")
 
         assert expected == self.parser._parse_description()
 
@@ -235,8 +246,9 @@ class TestGoogleBugParser(object):
         # Data we expect
         expected = {
             'title': 'setup/teardown support',
-            'description': ("Implement plus and minus infty, sign(x) doesn't work for "
-                            "-infty... The\nlimit code should handle +-infty correctly."),
+            'description': ("Implement plus and minus infty, sign(x) doesn't "
+                            "work for -infty... The\nlimit code should handle "
+                            "+-infty correctly."),
             'status': 'Accepted',
             'importance': 'Low',
             'people_involved': 1,
