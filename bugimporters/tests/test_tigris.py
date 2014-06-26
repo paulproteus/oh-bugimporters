@@ -112,18 +112,18 @@ class TestTigrisBugImporter(object):
     def setup_class(cls):
         # Set up the TigrisTrackerModels that will be used here.
         cls.tm = dict(
-                tracker_name='SCons',
-                base_url='http://scons.tigris.org/issues/',
-                bug_project_name_format='{tracker_name}',
-                bitesized_type='key',
-                bitesized_text='Easy',
-                documentation_type='key,comp',
-                documentation_text='documentation',
-                bugimporter='tigris',
-                queries=[
+            tracker_name='SCons',
+            base_url='http://scons.tigris.org/issues/',
+            bug_project_name_format='{tracker_name}',
+            bitesized_type='key',
+            bitesized_text='Easy',
+            documentation_type='key,comp',
+            documentation_text='documentation',
+            bugimporter='tigris',
+            queries=[
                 'http://scons.tigris.org/issues/xml.cgi',
-                ],
-                )
+            ],
+        )
         spider = bugimporters.main.BugImportSpider()
         spider.input_data = [cls.tm]
         bug_importer_and_objs = list(spider.get_bugimporters())
@@ -146,18 +146,24 @@ class TestTigrisBugImporter(object):
         assert len(all_bugs) == 1
         bug = all_bugs[0]
         self.assertEqual(bug['title'], "Switching to argparse")
-        self.assertEqual(bug['description'], """With the new floor for the core sources being Python 2.7, the optparse module 
-that gets used for command-line parsing is regarded to be deprecated.
-
-It should get rewritten to use the argparse module instead.""")
+        self.assertEqual(
+            bug['description'],
+            ("With the new floor for the core sources being Python 2.7, the "
+             "optparse module \nthat gets used for command-line parsing is "
+             "regarded to be deprecated.\n\nIt should get rewritten to use "
+             "the argparse module instead.")
+        )
         self.assertEqual(bug['status'], 'RESOLVED')
         self.assertEqual(bug['importance'], 'P4')
         self.assertEqual(bug['people_involved'], 1)
-        self.assertEqual(bug['date_reported'], datetime.datetime(2014, 4, 27, 3, 3, 2).isoformat())
-        self.assertEqual(bug['last_touched'], datetime.datetime(2014, 4, 27, 3, 52, 51).isoformat())
+        self.assertEqual(bug['date_reported'],
+                         datetime.datetime(2014, 4, 27, 3, 3, 2).isoformat())
+        self.assertEqual(bug['last_touched'],
+                         datetime.datetime(2014, 4, 27, 3, 52, 51).isoformat())
         self.assertEqual(bug['submitter_username'], 'dirkbaechle')
         self.assertEqual(bug['submitter_realname'], '')
-        self.assertEqual(bug['canonical_bug_link'], 'http://scons.tigris.org/issues/show_bug.cgi?id=2946')
+        self.assertEqual(bug['canonical_bug_link'],
+                         'http://scons.tigris.org/issues/show_bug.cgi?id=2946')
         self.assert_(not bug['good_for_newcomers'])
         self.assert_(bug['looks_closed'])
 

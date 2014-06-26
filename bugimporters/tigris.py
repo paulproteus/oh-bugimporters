@@ -207,11 +207,13 @@ class TigrisBugImporter(BugImporter):
             bbp = self.bug_parser(bug_xml)
 
             # Get the parsed data dict from the TigrisBugParser.
-            data = bbp.get_parsed_data_dict(base_url=self.tm.get_base_url(),
-                                bitesized_type=self.tm.bitesized_type,
-                                bitesized_text=self.tm.bitesized_text,
-                                documentation_type=self.tm.documentation_type,
-                                documentation_text=self.tm.documentation_text)
+            data = bbp.get_parsed_data_dict(
+                base_url=self.tm.get_base_url(),
+                bitesized_type=self.tm.bitesized_type,
+                bitesized_text=self.tm.bitesized_text,
+                documentation_type=self.tm.documentation_type,
+                documentation_text=self.tm.documentation_text
+            )
 
             name_format = '{tracker_name}'
             if hasattr(self.tm, 'bug_project_name_format'):
@@ -238,7 +240,7 @@ class TigrisBugParser:
         if xml_doc.tag != 'issue':
             error_msg = "You passed us a %s tag." % xml_doc.tag
             error_msg += " We wanted a <issue> object."
-            raise ValueError, error_msg
+            raise ValueError(error_msg)
         tags = xml_doc.xpath(tag_name)
         try:
             return tags[index].text or u''
@@ -283,9 +285,8 @@ class TigrisBugParser:
                              base_url, bitesized_type, bitesized_text,
                              documentation_type, documentation_text):
         # Generate the bug_url.
-        self.bug_url = urlparse.urljoin(
-                base_url,
-                'show_bug.cgi?id=%d' % self.bug_id)
+        self.bug_url = urlparse.urljoin(base_url,
+                                        'show_bug.cgi?id=%d' % self.bug_id)
 
         xml_data = self.bug_xml
 
@@ -293,22 +294,21 @@ class TigrisBugParser:
                                                         'creation_ts')
         last_touched_text = self.get_tag_text_from_xml(xml_data, 'delta_ts')
         u, r = self._who_tag_to_username_and_realname(
-                                        xml_data.xpath('.//reporter')[0])
+            xml_data.xpath('.//reporter')[0])
         status = self.get_tag_text_from_xml(xml_data, 'issue_status')
         looks_closed = status in ('RESOLVED', 'WONTFIX', 'CLOSED', 'INVALID')
 
         ret_dict = bugimporters.items.ParsedBug({
             'title': self.get_tag_text_from_xml(xml_data, 'short_desc'),
             'description': (self.get_tag_text_from_xml(
-                                xml_data, 'long_desc/thetext') or
-                                '(Empty description)'),
+                xml_data, 'long_desc/thetext') or '(Empty description)'),
             'status': status,
             'importance': self.get_tag_text_from_xml(xml_data, 'priority'),
             'people_involved': self.tigris_count_people_involved(xml_data),
             'date_reported': self.tigris_date_to_printable_datetime(
-                    date_reported_text),
+                date_reported_text),
             'last_touched': self.tigris_date_to_printable_datetime(
-                    last_touched_text),
+                last_touched_text),
             'last_polled': printable_datetime(),
             'submitter_username': u,
             'submitter_realname': r,
@@ -326,7 +326,7 @@ class TigrisBugParser:
                 is_easy = any(b in keywords for b in b_list)
             if not is_easy and bitesized_type == 'wboard':
                 whiteboard_text = self.get_tag_text_from_xml(
-                                            xml_data, 'status_whiteboard')
+                    xml_data, 'status_whiteboard')
                 is_easy = any(b in whiteboard_text for b in b_list)
         ret_dict['good_for_newcomers'] = is_easy
         # Check whether this is a documentation bug.
@@ -346,6 +346,6 @@ class TigrisBugParser:
 
     def generate_bug_project_name(self, bug_project_name_format, tracker_name):
         return bug_project_name_format.format(
-                tracker_name=tracker_name,
-                product=self.product,
-                component=self.component)
+            tracker_name=tracker_name,
+            product=self.product,
+            component=self.component)
