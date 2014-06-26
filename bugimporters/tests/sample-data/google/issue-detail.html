@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<!-- saved from url=(0184)https://code.google.com/p/sympy/issues/detail?id=6&sort=Opened&colspec=ID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ 
+ <meta name="ROBOTS" content="NOARCHIVE">
+ 
+ <link rel="icon" type="image/vnd.microsoft.icon" href="https://ssl.gstatic.com/codesite/ph/images/phosting.ico">
+ 
+ 
+ <script src="./sympy-issue-detail_files/cb=gapi.loaded_0" async=""></script><script type="text/javascript" async="" src="./sympy-issue-detail_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+ 
+ 
+ 
+ 
+ var codesite_token = "wQMSNJ4M-5Abv7XDccRKWvo7Cso:1397855400056";
+ 
+ 
+ var CS_env = {"loggedInUserEmail": "shaun.duncan@gmail.com", "relativeBaseUrl": "", "projectName": "sympy", "domainName": null, "assetHostPath": "https://ssl.gstatic.com/codesite/ph", "assetVersionPath": "https://ssl.gstatic.com/codesite/ph/4964405422594852395", "profileUrl": "/u/110636330510916017185/", "projectHomeUrl": "/p/sympy", "token": "wQMSNJ4M-5Abv7XDccRKWvo7Cso:1397855400056"};
+ var _gaq = _gaq || [];
+ _gaq.push(
+ ['siteTracker._setAccount', 'UA-18071-1'],
+ ['siteTracker._trackPageview']);
+ 
+ _gaq.push(
+ ['projectTracker._setAccount', 'UA-681045-2'],
+ ['projectTracker._trackPageview']);
+ 
+ (function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+ 
+ </script><script type="text/javascript" async="" src="./sympy-issue-detail_files/ga.js"></script>
+ 
+ 
+ <title>Issue 6 - 
+ sympy -
+ 
+ limits at +- infinity - 
+ Python library for symbolic mathematics - Google Project Hosting
+ </title>
+ <link type="text/css" rel="stylesheet" href="./sympy-issue-detail_files/core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="./sympy-issue-detail_files/ph_detail.css">
+ 
+ 
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="https://ssl.gstatic.com/codesite/ph/4964405422594852395/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(https://ssl.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ 
+ 
+ .attachments { width:33%; border-top:2px solid #999; padding-top: 3px; margin-left: .7em;}
+ .attachments table { margin-bottom: 0.75em; }
+ .attachments table tr td { padding: 0; margin: 0; font-size: 95%; }
+ .preview { border: 2px solid #c3d9ff; padding: 1px; }
+ .preview:hover { border: 2px solid blue; }
+ .label { white-space: nowrap; }
+ .derived { font-style:italic }
+ .cursor_on .author {
+ background: url(https://ssl.gstatic.com/codesite/ph/images/show-arrow.gif) no-repeat 2px;
+ }
+ .hiddenform {
+ display: none;
+ }
+
+ 
+ </style>
+<link type="text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css"><script type="text/javascript" charset="utf-8" src="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/js/page_context.js"></script></head>
+<body class="t3" screen_capture_injected="true">
+<script type="text/javascript">
+ window.___gcfg = {lang: 'en'};
+ (function() 
+ {var po = document.createElement("script");
+ po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+ var s = document.getElementsByTagName("script")[0];
+ s.parentNode.insertBefore(po, s);
+ })();
+</script>
+<div class="headbg">
+
+ <div id="gaia">
+ 
+
+ <span>
+ 
+ 
+ 
+ <a href="https://code.google.com/p/sympy/issues/detail?id=6&sort=Opened&colspec=ID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type#" id="multilogin-dropdown" onclick="return false;"><u><b>shaun.duncan@gmail.com</b></u> <small>▼</small></a>
+ 
+ 
+ | <a href="https://code.google.com/u/110636330510916017185/" id="projects-dropdown" onclick="return false;"><u>My favorites</u> <small>▼</small></a>
+ | <a href="https://code.google.com/u/110636330510916017185/" onclick="_CS_click(&#39;/gb/ph/profile&#39;);" title="Profile, Updates, and Settings"><u>Profile</u></a>
+ | <a href="https://www.google.com/accounts/Logout?continue=https%3A%2F%2Fcode.google.com%2Fp%2Fsympy%2Fissues%2Fdetail%3Fid%3D6%26sort%3DOpened%26colspec%3DID%2520Status%2520Priority%2520Owner%2520Summary%2520Stars%2520Opened%2520Closed%2520Reporter%2520Cc%2520Difficulty%2520Modified%2520Type" onclick="_CS_click(&#39;/gb/ph/signout&#39;);"><u>Sign out</u></a>
+ 
+ </span>
+
+ </div>
+
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if lte IE 7]>
+<div style="text-align:center;">
+Your version of Internet Explorer is not supported. Try a browser that
+contributes to open source, such as <a href="http://www.firefox.com">Firefox</a>,
+<a href="http://www.google.com/chrome">Google Chrome</a>, or
+<a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a>.
+</div>
+<![endif]-->
+
+
+
+ <table style="padding:0px; margin: 0px 0px 10px 0px; width:100%" cellpadding="0" cellspacing="0" itemscope="" itemtype="http://schema.org/CreativeWork">
+ <tbody><tr style="height: 58px;">
+ 
+ 
+ 
+ <td id="plogo">
+ <link itemprop="url" href="https://code.google.com/p/sympy">
+ <a href="https://code.google.com/p/sympy/">
+ 
+ 
+ <img src="./sympy-issue-detail_files/logo" alt="Logo" itemprop="image">
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.5em">
+ 
+ <div id="pname">
+ <a href="https://code.google.com/p/sympy/"><span itemprop="name">sympy</span></a>
+ </div>
+ 
+ <div id="psum">
+ <a id="project_summary_link" href="https://code.google.com/p/sympy/"><span itemprop="description">Python library for symbolic mathematics</span></a>
+ 
+ </div>
+ 
+ 
+ </td>
+ <td style="white-space:nowrap;text-align:right; vertical-align:bottom;">
+ 
+ <form action="https://code.google.com/hosting/search">
+ <input size="30" name="q" value="" type="text">
+ 
+ <input type="submit" name="projectsearch" value="Search projects">
+ </form>
+ 
+ </td></tr>
+ </tbody></table>
+
+</div>
+
+ 
+<div id="mt" class="gtb"> 
+ <a href="https://code.google.com/p/sympy/" class="tab ">Project&nbsp;Home</a>
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/sympy/wiki/Downloads?tm=2" class="tab ">Downloads</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/sympy/wiki/NewWiki?tm=6" class="tab ">Wiki</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/sympy/wiki/IssueTracking?tm=3" class="tab active">Issues</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="https://code.google.com/p/sympy/wiki/SourceCode?tm=4" class="tab ">Source</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="gtbc"></div>
+</div>
+<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" class="st">
+ <tbody><tr>
+ 
+ 
+ 
+ 
+ 
+ <td class="subt">
+ <div class="issueDetail">
+<div class="isf">
+ 
+ 
+ <span class="inIssueEntry">
+ <a class="buttonify" href="https://code.google.com/p/sympy/issues/entry" onclick="return _newIssuePrompt();">New issue</a>
+ </span> &nbsp;
+ 
+ <span class="inIssueList">
+ <span>Search</span>
+ <form action="https://code.google.com/p/sympy/issues/list" method="GET" style="display:inline">
+ <select id="can" name="can">
+ 
+<option disabled="disabled">Search within:</option>
+<option value="1">&nbsp;All issues</option>
+<option value="2" selected="selected">&nbsp;Open issues</option>
+
+ <option value="3">&nbsp;Open and owned by me</option>
+ <option value="4">&nbsp;Open and reported by me</option>
+ <option value="5">&nbsp;Open and starred by me</option>
+ <option value="8">&nbsp;Open with comment by me</option>
+
+<option value="6">&nbsp;New issues</option>
+<option value="7">&nbsp;Issues to verify</option>
+
+ </select>
+ <span>for</span>
+ <span id="qq"><input type="text" size="38" id="searchq" name="q" value="" autocomplete="off" onkeydown="_blurOnEsc(event)"></span>
+ <input type="hidden" id="sort" name="sort" value="Opened">
+ 
+ <span id="search_colspec"><input type="hidden" name="colspec" value="ID Status Priority Owner Summary Stars Opened Closed Reporter Cc Difficulty Modified Type"></span>
+ 
+ 
+ 
+ <input type="hidden" name="cells" value="tiles">
+ <input type="submit" value="Search">
+ </form>
+ </span> &nbsp;
+ <span class="inIssueAdvSearch">
+ <a href="https://code.google.com/p/sympy/issues/advsearch">Advanced search</a>
+ </span> &nbsp;
+ <span class="inIssueSearchTips">
+ <a href="https://code.google.com/p/sympy/issues/searchtips">Search tips</a>
+ </span> &nbsp;
+ <span class="inIssueSubscriptions">
+ <a href="https://code.google.com/p/sympy/issues/subscriptions">Subscriptions</a>
+ </span>
+</div>
+</div>
+ </td>
+ 
+ 
+ 
+ 
+ <td align="right" valign="top" class="bevel-right"></td>
+ </tr>
+</tbody></table>
+
+
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+<div id="maincol">
+
+ 
+
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+ 
+
+<div id="color_control" class="">
+<div id="issueheader">
+<table cellpadding="0" cellspacing="0" width="100%"><tbody>
+ <tr>
+ <td class="vt h3" nowrap="nowrap" style="padding:0 5px">
+ 
+ 
+ 
+ 
+ <img width="15" height="15" src="./sympy-issue-detail_files/star_off.gif" style="cursor:pointer" id="star" title="Vote for this issue and get email change notifications" onclick="_toggleStar(this,&#39;&#39;,&#39;sympy&#39;,6, codesite_token); _syncStarIcons(this, &#39;star2&#39;)">
+ 
+ 
+ Issue <a href="https://code.google.com/p/sympy/issues/detail?id=6">6</a>:
+ </td>
+ <td width="90%" class="vt">
+ <span class="h3">limits at +- infinity</span>
+ </td>
+ <td>
+ 
+ <div class="pagination">
+ 
+ 1 of 1186
+ <a href="https://code.google.com/p/sympy/issues/detail?colspec=ID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type&sort=Opened&id=13" title="Next">Next ›</a>
+ </div>
+ </td>
+ </tr>
+ <tr>
+ <td></td>
+ <td nowrap="nowrap">
+ 
+ 
+ 1 person starred this issue and may be notified of changes.
+ 
+ 
+ 
+ </td>
+ <td align="center" nowrap="nowrap">
+ 
+ <a href="https://code.google.com/p/sympy/issues/list?colspec=ID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type&cursor=sympy%3A6&sort=Opened">Back to list</a>
+ 
+ </td>
+ </tr>
+ 
+</tbody></table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="issuepage" id="meta-container">
+<tbody class="collapse"> 
+ <tr>
+ <td id="issuemeta">
+ <div id="meta-float">
+ 
+<table cellspacing="0" cellpadding="0">
+ <tbody><tr><th align="left">Status:&nbsp;</th>
+ <td width="100%">
+ 
+ <span title="Problem reproduced / Need acknowledged">Valid</span>
+ 
+ </td>
+ </tr>
+ 
+ 
+ 
+ 
+ <tr><th align="left">Owner:&nbsp;</th><td>
+ 
+ 
+ ----
+ 
+ 
+ </td>
+ </tr>
+ 
+ 
+ 
+ 
+ <tr><th class="vt" align="left">Cc:&nbsp;</th><td>
+ 
+ 
+  
+
+ <a class="userlink" href="https://code.google.com/u/asmeurer@gmail.com/">asmeurer@gmail.com</a> 
+ 
+ </td></tr>
+ 
+ 
+ <tr><td colspan="2">
+ 
+ 
+ 
+ <div style="padding-top:2px">
+ 
+ <a href="https://code.google.com/p/sympy/issues/list?q=label:Type-Enhancement" title="Request for enhancement" class="label"><b>Type-</b>Enhancement</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ <div style="padding-top:2px">
+ 
+ <a href="https://code.google.com/p/sympy/issues/list?q=label:Priority-Medium" title="Normal priority" class="label"><b>Priority-</b>Medium</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ <div style="padding-top:2px">
+ 
+ <a href="https://code.google.com/p/sympy/issues/list?q=label:Milestone-Release0.4" title="" class="label"><b>Milestone-</b>Release0.4</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ </td></tr>
+ 
+</tbody></table>
+<div class="rel_issues">
+ 
+ 
+ 
+</div>
+
+ <br>
+ <div class="issue_restrictions">
+ <div class="restrictions_header">
+ <div class="SPRITE_lock_grey goog-inline-block"></div>
+ Restricted
+ </div>
+ <ul>
+ 
+ 
+ <li>Only users with Commit permission may comment.</li>
+ 
+ 
+ 
+ </ul>
+ </div>
+
+
+ <br><br>
+ 
+ 
+ 
+ 
+ 
+
+
+ 
+ </div>&nbsp;
+ </td>
+ <td class="vt issuedescription" width="100%" id="cursorarea">
+ 
+<div class="cursor_off vt issuedescription" id="hc0">
+ 
+ 
+ <div class="author">
+ <span class="role_label">Project Member</span>
+ Reported by
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a>,
+ <span class="date" title="Wed Feb 28 03:53:10 2007">Feb 28, 2007</span>
+ 
+ </div>
+<pre>Implement plus and minus infty, sign(x) doesn't work for -infty... The
+limit code should handle +-infty correctly.
+</pre>
+
+</div>
+
+ 
+
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc1">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Wed Mar  7 06:49:38 2007">
+ Mar 7, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c1" href="https://code.google.com/p/sympy/issues/detail?id=6#c1">#1</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre><i>(No comment was entered for this change.)</i>
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Owner:</b>
+ ---
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc2">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sun Mar 25 09:45:07 2007">
+ Mar 25, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c2" href="https://code.google.com/p/sympy/issues/detail?id=6#c2">#2</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre><i>(No comment was entered for this change.)</i>
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Labels:</b>
+ Milestone-Release0.4
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc3">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 07:58:55 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c3" href="https://code.google.com/p/sympy/issues/detail?id=6#c3">#3</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>I implemeted a naive version of -infty. 
+
+Plase tell me if this is enough or what more do we need
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc4">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 07:59:55 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c4" href="https://code.google.com/p/sympy/issues/detail?id=6#c4">#4</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>ok, ignore my last comment. sign(-infty) does not work ...
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc5">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 08:03:20 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c5" href="https://code.google.com/p/sympy/issues/detail?id=6#c5">#5</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>we need limits to work for both +infty and -infty. (they don't currently). The fix
+shouldn't be difficult, but needs a little thinking.
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc6">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 09:18:24 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c6" href="https://code.google.com/p/sympy/issues/detail?id=6#c6">#6</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>working on this
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Owner:</b>
+ fabian.seoane
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc7">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 09:20:29 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c7" href="https://code.google.com/p/sympy/issues/detail?id=6#c7">#7</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>I think it's working: 
+
+limit(1/x, x, infty)
+
+and 
+
+limit(1/x, x, -infty)
+
+are working for me (if that was what it was needed)
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc8">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 09:34:23 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c8" href="https://code.google.com/p/sympy/issues/detail?id=6#c8">#8</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>this, and also limits, when limit actually returns + or -infty. 
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc9">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Tue Mar 27 09:35:36 2007">
+ Mar 27, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c9" href="https://code.google.com/p/sympy/issues/detail?id=6#c9">#9</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>ok, i'll look at that
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc10">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri Mar 30 16:57:19 2007">
+ Mar 30, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c10" href="https://code.google.com/p/sympy/issues/detail?id=6#c10">#10</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>Current status is the following: +- infinity is implemented, but when I try to make
+use of +- infinity in limits (with the attached patch), then some simple limits, like
+limit(-x, x, infty) work correctly but other limits that used to work (they are in
+the tests) now fail with a pole_error. 
+
+I've looked at it, i've even looked at the original maple algorithm, but I didn't
+come with a solution, so i'm leaving it unassigned for now, I'll move to other things
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Summary:</b>
+ limits at +- infinity
+ 
+ <br>
+ 
+ <b>Owner:</b>
+ ---
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc11">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri Mar 30 16:57:50 2007">
+ Mar 30, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c11" href="https://code.google.com/p/sympy/issues/detail?id=6#c11">#11</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre><i>(No comment was entered for this change.)</i>
+</pre>
+ 
+ <div class="attachments">
+ 
+ 
+ 
+ 
+
+
+
+
+ <table cellspacing="3" cellpadding="2" border="0">
+ <tbody><tr><td width="20">
+ <a href="https://sympy.googlecode.com/issues/attachment?aid=8622700892042649132&name=limits.diff&token=QaH3VDafI6YtABT9sde1GJ8YNI4%3A1397855400080">
+ <img width="15" height="15" src="./sympy-issue-detail_files/paperclip.gif" border="0">
+ </a>
+ </td>
+ <td style="min-width:16em" valign="top">
+ 
+ <b>limits.diff</b>
+ <br>
+ 592 bytes
+ 
+ 
+ &nbsp; <a href="https://sympy.googlecode.com/issues/attachment?aid=8622700892042649132&name=limits.diff&token=QaH3VDafI6YtABT9sde1GJ8YNI4%3A1397855400080">Download</a>
+ 
+ </td>
+ 
+ </tr>
+ 
+ </tbody></table>
+
+
+ 
+ </div>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc12">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri Mar 30 17:04:02 2007">
+ Mar 30, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c12" href="https://code.google.com/p/sympy/issues/detail?id=6#c12">#12</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>Yeah, I know there were some nasty things with infinities. There is a note in the
+code, that marks a place, that doesn't work for -infinity. I'll try to look at it, if
+I find a solution, if not, let's just leave it for now.
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc13">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri Mar 30 17:20:39 2007">
+ Mar 30, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c13" href="https://code.google.com/p/sympy/issues/detail?id=6#c13">#13</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>I put your patch as a comment. Try this in isympy:
+
+exp(-1/x).series(x,2)
+
+that's the pole error we get in limits. It should return a meaningful series instead.
+Do you think there is anything like that? Something like in this case:
+
+In [11]: log(1+1/x).series(x,4)
+Out[11]: -1/4*x**4-1/2*x**2-log(x)+1/3*x**3+x
+
+As you can see, it just gets the singularity log(x) out of it, and the rest is a nice
+function.
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc14">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri Mar 30 17:23:04 2007">
+ Mar 30, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c14" href="https://code.google.com/p/sympy/issues/detail?id=6#c14">#14</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>No, even maple is not able to do it. So we shouldn't have been calculating the series
+in the first place. :)
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc15">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Fri Mar 30 17:35:00 2007">
+ Mar 30, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c15" href="https://code.google.com/p/sympy/issues/detail?id=6#c15">#15</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>As you can see by uncommenting my test print and doing py.test on limits.py:
+
+tests/test_limits.py[16] .LL Infinity 1 Infinity
+LL Infinity 1 Infinity
+LL Infinity 1 Infinity
+LL Infinity -1 -Infinity
+LL Infinity 1 Infinity
+LL Infinity -1 -Infinity
+LL Infinity -1 -Infinity
+LL Infinity 1 Infinity
+LL Infinity -1 -Infinity
+LL Infinity 1 Infinity
+..LL Infinity 1 Infinity
+LL Infinity -1 -Infinity
+....LL Infinity 1 Infinity
+...LL Infinity -1 -Infinity
+..LL Infinity 1 Infinity
+LL Infinity 1 Infinity
+LL Infinity -1 -Infinity
+.LL Infinity 1 Infinity
+.LL Infinity True Infinity
+LL Infinity True Infinity
+
+the sign() sometimes returns True (!), it's a bug, but not the one we are looking
+for. Probably it has to do something with comparing the infinities, but I don't know
+exactly. 
+
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc16">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sat Apr 21 16:17:11 2007">
+ Apr 21, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c16" href="https://code.google.com/p/sympy/issues/detail?id=6#c16">#16</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>Also I would suggest to use "oo" instead of "infty", as it is shorter, more intuitive
+(I never know if it is infty, or infinity, or inf) and is easy to remember. Inspired
+by SAGE. 
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc17">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sun Apr 22 06:37:33 2007">
+ Apr 22, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ 
+ <a name="c17" href="https://code.google.com/p/sympy/issues/detail?id=6#c17">#17</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/103948515893177094863/">fabian.s...@gmail.com</a></span>
+ 
+<pre>I like oo a lot
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc18">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sun Apr 22 10:20:48 2007">
+ Apr 22, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c18" href="https://code.google.com/p/sympy/issues/detail?id=6#c18">#18</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>Working on the oo.
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc19">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sun Apr 22 10:45:18 2007">
+ Apr 22, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c19" href="https://code.google.com/p/sympy/issues/detail?id=6#c19">#19</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>infty renamed to oo. 
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc20">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sat Apr 28 13:06:30 2007">
+ Apr 28, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c20" href="https://code.google.com/p/sympy/issues/detail?id=6#c20">#20</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>Some more bugs related to infinity:
+
+In [5]: limit(log(x), x, 0)
+Out[5]: Infinity()
+
+In [6]: limit(log(x), x, 0) == oo
+Out[6]: True
+
+In [7]: limit(atan(x), x, oo)
+---------------------------------------------------------------------------
+sympy.core.power.pole_error                                Traceback (most recent
+call last)
+
+/home/ondra/sympy/&lt;ipython console&gt; 
+
+/home/ondra/sympy/modules/limits.py in limit(e, z, z0, evaluate)
+
+/home/ondra/sympy/&lt;string&gt; in &lt;lambda&gt;(e, x)
+
+/home/ondra/sympy/modules/limits.py in memoize(func, *args)
+
+/home/ondra/sympy/modules/limits.py in limitinf(e, x)
+
+/home/ondra/sympy/modules/limits.py in mrv_leadterm(e, x, Omega)
+
+/home/ondra/sympy/modules/limits.py in mrv_leadterm(e, x, Omega)
+
+/home/ondra/sympy/core/functions.py in series(self, sym, n)
+
+/home/ondra/sympy/core/power.py in subs(self, old, new)
+
+/home/ondra/sympy/core/numbers.py in __pow__(self, a)
+
+/home/ondra/sympy/core/basic.py in __call__(self, *args, **kwargs)
+
+/home/ondra/sympy/core/power.py in eval(self)
+
+pole_error: 0**(-1): Division by 0.
+
+</pre>
+ 
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc21">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Sat Jun 16 11:10:01 2007">
+ Jun 16, 2007
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c21" href="https://code.google.com/p/sympy/issues/detail?id=6#c21">#21</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/104039945248245758823/">ondrej.c...@gmail.com</a></span>
+ 
+<pre>The bugs from the comment 20 are fixed. That the +- oo in limits is ugly is true, but
+the tests work, so I am closing this issue.
+
+In [1]: limit(atan(x), x, oo)
+Out[1]: 1/2*pi
+
+In [2]: limit(log(x), x, 0) == oo
+Out[2]: Equation(-oo, oo)
+
+In [3]: bool(limit(log(x), x, 0) == oo)
+Out[3]: False
+
+In [4]: limit(log(x), x, 0)
+Out[4]: -oo
+
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Status:</b>
+ Fixed
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc22">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Wed Mar  5 12:30:38 2014">
+ Mar 5, 2014
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c22" href="https://code.google.com/p/sympy/issues/detail?id=6#c22">#22</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/asmeurer@gmail.com/">asmeurer@gmail.com</a></span>
+ 
+<pre>We have moved issues to GitHub <a href="https://github.com/sympy/sympy/issues" rel="nofollow">https://github.com/sympy/sympy/issues</a>. 
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Labels:</b>
+ Restrict-AddIssueComment-Commit
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc23">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Thu Mar 27 08:30:48 2014">
+ Mar 27, 2014
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c23" href="https://code.google.com/p/sympy/issues/detail?id=6#c23">#23</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/113518207426301808764/">skirpic...@gmail.com</a></span>
+ 
+<pre>reopen for <a href="https://github.com/sympy/sympy/issues/7235#issuecomment-38816780" rel="nofollow">https://github.com/sympy/sympy/issues/7235#issuecomment-38816780</a>
+</pre>
+ 
+ 
+ <div class="updates">
+ <div class="round4"></div>
+ <div class="round2"></div>
+ <div class="round1"></div>
+ <div class="box-inner">
+ 
+ <b>Status:</b>
+ Valid
+ 
+ <br>
+ 
+ <b>Cc:</b>
+ asmeurer@gmail.com
+ 
+ <br>
+ 
+ </div>
+ <div class="round1"></div>
+ <div class="round2"></div>
+ <div class="round4"></div>
+ </div>
+ 
+ </div>
+ 
+
+ 
+ 
+ 
+ 
+ <div class="cursor_off vt issuecomment" id="hc24">
+ <div style="float:right; margin-right:.3em; text-align:right">
+ <span class="date" title="Thu Mar 27 08:33:02 2014">
+ Mar 27, 2014
+ </span>
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">
+ <span class="role_label">Project Member</span>
+ <a name="c24" href="https://code.google.com/p/sympy/issues/detail?id=6#c24">#24</a>
+ 
+
+ <a class="userlink" href="https://code.google.com/u/113518207426301808764/">skirpic...@gmail.com</a></span>
+ 
+<pre>Migrated to <a href="http://github.com/sympy/sympy/issues/3105" rel="nofollow">http://github.com/sympy/sympy/issues/3105</a>
+</pre>
+ 
+ 
+ </div>
+ 
+
+
+ 
+
+
+ </td>
+ </tr>
+
+ 
+
+</tbody>
+</table>
+<br>
+<script type="text/javascript" src="./sympy-issue-detail_files/dit_scripts.js"></script>
+
+
+
+ 
+
+</div> 
+<form name="delcom" action="https://code.google.com/p/sympy/issues/delComment.do?q=&can=2&groupby=&sort=Opened&colspec=ID+Status+Priority+Owner+Summary+Stars+Opened+Closed+Reporter+Cc+Difficulty+Modified+Type" method="POST">
+ <input type="hidden" name="sequence_num" value="">
+ <input type="hidden" name="mode" value="">
+ <input type="hidden" name="id" value="6">
+ <input type="hidden" name="token" value="wQMSNJ4M-5Abv7XDccRKWvo7Cso:1397855400056">
+</form>
+
+<div id="helparea"></div>
+<script type="text/javascript">
+ _onload();
+ function delComment(sequence_num, delete_mode) {
+ var f = document.forms["delcom"];
+ f.sequence_num.value = sequence_num;
+ f.mode.value = delete_mode;
+ 
+ f.submit();
+ return false;
+ }
+ 
+ _floatMetadata();
+</script>
+<script type="text/javascript" src="./sympy-issue-detail_files/kibbles.js"></script>
+<script type="text/javascript">
+ _setupKibblesOnDetailPage(
+ 'https://code.google.com/p/sympy/issues/list?colspec\x3dID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type\x26cursor\x3dsympy%3A6\x26sort\x3dOpened',
+ '/p/sympy/issues/entry',
+ '',
+ '../../sympy/issues/detail?colspec\x3dID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type\x26sort\x3dOpened\x26id\x3d13',
+ '', 'sympy', 6,
+ false, true, codesite_token);
+</script>
+ 
+ 
+ 
+ <script type="text/javascript" src="./sympy-issue-detail_files/ph_core.js"></script>
+ 
+ 
+ 
+ 
+</div> 
+
+<div id="footer" dir="ltr">
+ <div class="text">
+ <a href="https://code.google.com/projecthosting/terms.html">Terms</a> -
+ <a href="http://www.google.com/privacy.html">Privacy</a> -
+ <a href="https://code.google.com/p/support/">Project Hosting Help</a>
+ </div>
+</div>
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Powered by <a href="http://code.google.com/projecthosting/">Google Project Hosting</a></span>
+ </div>
+
+ 
+ 
+
+
+ 
+ 
+
+
+<div class="menuDiv instance0" id="menuDiv-projects-dropdown" style="position: absolute; top: 19px; left: 1858px; display: none;"><div class="menuCategory default" style="display: none;"></div><div class="menuCategory controls first"><hr class="menuSeparator"><a class="menuItem" href="https://code.google.com/hosting/" style="display: block;">Find open source projects...</a><a class="menuItem" href="https://code.google.com/hosting/createProject" style="display: block;">Create a project...</a></div></div><div class="menuDiv instance1" id="menuDiv-multilogin-dropdown" style="position: absolute; top: 19px; left: 1666px; display: none;"><div class="menuCategory default first"><span class="menuText" style="display: block;"><b>shaun.duncan@gmail.com</b></span><a class="menuItem" href="https://code.google.com/p/sympy/issues/detail?id=6&sort=Opened&colspec=ID%20Status%20Priority%20Owner%20Summary%20Stars%20Opened%20Closed%20Reporter%20Cc%20Difficulty%20Modified%20Type&authuser=1" style="display: block;">shaun@shaunduncan.net</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a class="menuItem" href="http://www.google.com/accounts/AddSession?service=code&continue=https%3A%2F%2Fcode.google.com%2Fp%2Fsympy%2Fissues%2Fdetail%3Fid%3D6%26sort%3DOpened%26colspec%3DID%2520Status%2520Priority%2520Owner%2520Summary%2520Stars%2520Opened%2520Closed%2520Reporter%2520Cc%2520Difficulty%2520Modified%2520Type" style="display: block;"><nobr>Sign in with another account...</nobr></a></div></div></body></html>

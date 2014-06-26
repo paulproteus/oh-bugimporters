@@ -23,11 +23,7 @@ import lxml.etree
 import re
 import urlparse
 import scrapy.http
-
-try:
-    from unicodecsv import DictReader
-except ImportError:
-    from unicodecsv import UnicodeDictReader as DictReader
+import unicodecsv
 
 import bugimporters.items
 from bugimporters.helpers import cached_property
@@ -56,7 +52,7 @@ class RoundupBugImporter(BugImporter):
     def handle_query_csv(self, query_csv):
         # Turn the string into a list so csv.DictReader can handle it.
         query_csv_list = query_csv.split('\n')
-        dictreader = DictReader(query_csv_list)
+        dictreader = unicodecsv.DictReader(query_csv_list)
         bug_ids = [int(line['id']) for line in dictreader]
         return self.prepare_bug_urls(bug_ids)
 

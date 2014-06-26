@@ -10,7 +10,6 @@ setup_params = dict(
     packages=find_packages(),
     description='Bug importers for the OpenHatch project',
     install_requires=[
-        'gdata',
         'lxml',
         'cssselect',
         'pyopenssl',
