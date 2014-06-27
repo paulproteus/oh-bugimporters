@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE issuezilla SYSTEM "http://scons.tigris.org/issues/issuezilla.dtd">
+<issuezilla exporter="guest" charset="UTF-8" version="2.11" urlbase="http://scons.tigris.org/issues/" maintainer="owner@scons.tigris.org" project_domain="tigris.org" project_name="scons" project_id="1151" dtd_version="Revision: 1.2">
+<issue status_code="200" status_message="OK">
+  <issue_id>1</issue_id>
+  <issue_status>NEW</issue_status>
+  <priority>P4</priority>
+  <resolution></resolution>
+  <component>scons</component>
+  <delta_ts>2014-04-27 03:52:51</delta_ts>
+  <subcomponent>scons</subcomponent>
+  <reporter>dirkbaechle</reporter>
+  <issue_type>ENHANCEMENT</issue_type>
+  <creation_ts>2014-04-27 03:03:02</creation_ts>
+  <short_desc>Simple bug</short_desc>
+  <keywords>Easy</keywords>
+  <long_desc>
+   <who>garyo</who>
+   <issue_when>2014-04-27 03:03:02</issue_when>
+   <thetext>Test</thetext>
+  </long_desc>
+  <long_desc>
+   <who>dirkbaechle</who>
+   <issue_when>2014-04-27 03:52:51</issue_when>
+   <thetext></thetext>
+  </long_desc>
+</issue>
+<issue status_code="200" status_message="OK">
+  <issue_id>2</issue_id>
+  <issue_status>CLOSED</issue_status>
+  <priority>P4</priority>
+  <resolution></resolution>
+  <component>scons</component>
+  <delta_ts>2014-04-27 04:23:17</delta_ts>
+  <subcomponent>scons</subcomponent>
+  <reporter>dirkbaechle</reporter>
+  <issue_type>ENHANCEMENT</issue_type>
+  <creation_ts>2014-04-27 04:23:17</creation_ts>
+  <short_desc>Simple bug 2</short_desc>
+  <keywords>Easy,documentation</keywords>
+  <long_desc>
+   <who>dirkbaechle</who>
+   <issue_when>2014-04-27 04:23:17</issue_when>
+   <thetext>Test2</thetext>
+  </long_desc>
+</issue>
+<issue status_code="200" status_message="OK">
+  <issue_id>3</issue_id>
+  <issue_status>STARTED</issue_status>
+  <priority>P3</priority>
+  <resolution></resolution>
+  <component>documentation</component>
+  <delta_ts>2014-04-27 07:09:45</delta_ts>
+  <subcomponent>scons</subcomponent>
+  <reporter>dirkbaechle</reporter>
+  <issue_type>ENHANCEMENT</issue_type>
+  <creation_ts>2014-04-27 07:09:45</creation_ts>
+  <short_desc>Simple bug 3</short_desc>
+  <keywords></keywords>
+  <long_desc>
+   <who>dirkbaechle</who>
+   <issue_when>2014-04-27 07:09:45</issue_when>
+   <thetext>Test3</thetext>
+  </long_desc>
+</issue>
+</issuezilla>

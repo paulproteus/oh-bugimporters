@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE issuezilla SYSTEM "http://scons.tigris.org/issues/issuezilla.dtd">
+<issuezilla exporter="guest" charset="UTF-8" version="2.11" urlbase="http://scons.tigris.org/issues/" maintainer="owner@scons.tigris.org" project_domain="tigris.org" project_name="scons" project_id="1151" dtd_version="Revision: 1.2">
+<issue status_code="200" status_message="OK">
+  <issue_id>2946</issue_id>
+  <issue_status>RESOLVED</issue_status>
+  <priority>P4</priority>
+  <resolution>DUPLICATE</resolution>
+  <component>scons</component>
+  <version>SVN</version>
+  <rep_platform>All</rep_platform>
+  <assigned_to>issues@scons</assigned_to>
+  <delta_ts>2014-04-27 03:52:51</delta_ts>
+  <subcomponent>scons</subcomponent>
+  <reporter>dirkbaechle</reporter>
+  <target_milestone>-unspecified-</target_milestone>
+  <issue_type>ENHANCEMENT</issue_type>
+  <creation_ts>2014-04-27 03:03:02</creation_ts>
+  <qa_contact>issues@scons</qa_contact>
+  <status_whiteboard></status_whiteboard>
+  <issue_file_loc></issue_file_loc>
+  <votes></votes>
+  <op_sys>All</op_sys>
+  <short_desc>Switching to argparse</short_desc>
+  <keywords></keywords>
+  <is_duplicate>
+    <issue_id>2763</issue_id>
+    <who>dirkbaechle</who>
+    <when>2014-04-27 03:52:51</when>
+  </is_duplicate>
+  <long_desc>
+   <who>dirkbaechle</who>
+   <issue_when>2014-04-27 03:03:02</issue_when>
+   <thetext>With the new floor for the core sources being Python 2.7, the optparse module 
+that gets used for command-line parsing is regarded to be deprecated.
+
+It should get rewritten to use the argparse module instead.</thetext>
+  </long_desc>
+  <activity>
+    <user>dirkbaechle</user>
+    <when>2014-04-27 03:04:21</when>
+    <field_name>keywords</field_name>
+    <field_desc>Keywords</field_desc>
+    <oldvalue></oldvalue>
+    <newvalue>Easy</newvalue>
+  </activity>
+  <activity>
+    <user>dirkbaechle</user>
+    <when>2014-04-27 03:52:51</when>
+    <field_name>issue_status</field_name>
+    <field_desc>Status</field_desc>
+    <oldvalue>NEW</oldvalue>
+    <newvalue>RESOLVED</newvalue>
+  </activity>
+  <activity>
+    <user>dirkbaechle</user>
+    <when>2014-04-27 03:52:51</when>
+    <field_name>resolution</field_name>
+    <field_desc>Resolution</field_desc>
+    <oldvalue></oldvalue>
+    <newvalue>DUPLICATE</newvalue>
+  </activity>
+</issue>
+</issuezilla>
