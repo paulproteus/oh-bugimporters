@@ -17,7 +17,6 @@
 
 import lxml
 import lxml.etree
-import urlparse
 import logging
 import scrapy
 from urllib2 import urlopen
@@ -163,9 +162,8 @@ class TigrisBugImporter(BugImporter):
                 ids = '%d-%d' % (first_n, rest)
             else:
                 ids = '%d' % first_n
-            big_url = urlparse.urljoin(
-                self.tm.get_base_url(),
-                'xml.cgi?include_attachments=false&id=%s' % ids)
+            big_url = ('%sxml.cgi?include_attachments=false&'
+                       'id=%s') % (self.tm.get_base_url(), ids)
 
             # Create the corresponding request object
             r = scrapy.http.Request(url=big_url,
@@ -263,6 +261,10 @@ class TigrisBugParser:
     def component(self):
         return self.get_tag_text_from_xml(self.bug_xml, 'component')
 
+    @cached_property
+    def subcomponent(self):
+        return self.get_tag_text_from_xml(self.bug_xml, 'subcomponent')
+
     @staticmethod
     def _who_tag_to_username_and_realname(who_tag):
         username = who_tag.text
@@ -285,8 +287,7 @@ class TigrisBugParser:
                              base_url, bitesized_type, bitesized_text,
                              documentation_type, documentation_text):
         # Generate the bug_url.
-        self.bug_url = urlparse.urljoin(base_url,
-                                        'show_bug.cgi?id=%d' % self.bug_id)
+        self.bug_url = '%sshow_bug.cgi?id=%d' % (base_url, self.bug_id)
 
         xml_data = self.bug_xml
 
@@ -337,6 +338,8 @@ class TigrisBugParser:
                 is_doc = any(d in keywords for d in d_list)
             if not is_doc and 'comp' in documentation_type:
                 is_doc = any(d == self.component for d in d_list)
+            if not is_doc and 'subcomp' in documentation_type:
+                is_doc = any(d == self.subcomponent for d in d_list)
             if not is_doc and 'prod' in documentation_type:
                 is_doc = any(d == self.product for d in d_list)
         ret_dict['concerns_just_documentation'] = is_doc
