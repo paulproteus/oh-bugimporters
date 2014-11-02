@@ -151,10 +151,10 @@ class GoogleBugImporter(BugImporter):
                     '_no_update': True,
                 })
 
-    def process_bugs(self, bug_list, older_bugs_data_url=None):
-        if older_bugs_data_url:
+    def process_bugs(self, bug_list, older_bug_data_url=None):
+        if older_bug_data_url:
             for request in self.process_older_bugs(bug_list,
-                                                   older_bugs_data_url):
+                                                   older_bug_data_url):
                 yield request
             return
 
@@ -164,14 +164,14 @@ class GoogleBugImporter(BugImporter):
                                       callback=self.handle_bug_html)
             yield req
 
-    def process_older_bugs(self, bug_list, older_bugs_data_url):
+    def process_older_bugs(self, bug_list, older_bug_data_url):
         """
         Process CSV URLs that contain ALL google bugs, not just open ones
 
         :param bug_list: list of tuples (detail_url, issue_data)
-        :param older_bugs_data_url: URL to CSV of all bugs
+        :param older_bug_data_url: URL to CSV of all bugs
         """
-        request = scrapy.http.Request(url=older_bugs_data_url,
+        request = scrapy.http.Request(url=older_bug_data_url,
                                       callback=self.handle_query_csv)
 
         # For historical reasons, bug_list is a tuple of (url, data).
